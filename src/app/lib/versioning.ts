@@ -23,17 +23,17 @@ export const DEFAULT_CONFIG: SiteConfig = {
   version: 1,
   timestamp: new Date().toISOString(),
   theme: {
-    primary: "#f4c2c2",
-    secondary: "#fff0f5",
-    accent: "#d4a373",
+    primary: "#c4a888",
+    secondary: "#f5ece0",
+    accent: "#8b5e3c",
     background: "#fdf6f0",
     text: "#4a3728",
   },
-  defaultFonts: ["Playfair Display", "Dancing Script", "Quicksand"],
+  defaultFonts: ["Playfair Display", "Cormorant Garamond", "Montserrat"],
   canvasDefaults: {
     width: 2480,
     height: 3508,
-    backgroundColor: "#fff8f0",
+    backgroundColor: "#f5ece0",
   },
   quoteCategories: [
     "self-love",

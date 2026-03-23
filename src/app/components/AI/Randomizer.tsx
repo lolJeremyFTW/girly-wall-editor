@@ -38,10 +38,9 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
     // Clear canvas
     canvas.clearCanvas();
 
-    // Random background
-    const paletteNames = Object.keys(COLOR_PALETTES);
-    const palette = COLOR_PALETTES[paletteNames[Math.floor(Math.random() * paletteNames.length)] as keyof typeof COLOR_PALETTES];
-    const bgColor = palette[Math.floor(Math.random() * palette.length)];
+    // Random warm background from cream/earthy palettes
+    const bgOptions = ["#f5ece0", "#fdf6f0", "#f0e4d4", "#fff8f0", "#f0dcc8", "#e8dcc8"];
+    const bgColor = bgOptions[Math.floor(Math.random() * bgOptions.length)];
     canvas.setBackgroundColor(bgColor);
     onBackgroundChange(bgColor);
 
@@ -87,8 +86,9 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
       <button
         onClick={randomize}
         disabled={isRandomizing}
-        className="w-full py-2.5 bg-gradient-to-r from-pink to-lavender text-foreground text-sm font-medium
+        className="w-full py-2.5 text-foreground text-sm font-medium
                    rounded-lg transition-all disabled:opacity-50 hover:shadow-md cursor-pointer border-none"
+        style={{ background: "linear-gradient(135deg, #d4a878, #c49080)" }}
       >
         {isRandomizing ? "Creating magic..." : "Randomize Design"}
       </button>

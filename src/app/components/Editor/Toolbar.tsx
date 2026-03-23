@@ -1,18 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { CanvasHandle } from "./Canvas";
+import { TEXT_PRESETS } from "@/app/lib/elements";
 
 interface ToolbarProps {
   canvasRef: React.RefObject<CanvasHandle | null>;
 }
 
 export default function Toolbar({ canvasRef }: ToolbarProps) {
-  const addText = () => {
-    canvasRef.current?.addText("Your text here");
-  };
+  const [showTextMenu, setShowTextMenu] = useState(false);
 
   return (
-    <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm border border-pink/30">
+    <div className="flex items-center gap-1 bg-white/80 backdrop-blur-sm rounded-xl px-3 py-2 shadow-sm border border-pink/30 relative">
       <button
         onClick={() => canvasRef.current?.undo()}
         className="toolbar-btn"
@@ -30,10 +30,64 @@ export default function Toolbar({ canvasRef }: ToolbarProps) {
 
       <div className="w-px h-6 bg-pink/30 mx-1" />
 
-      <button onClick={addText} className="toolbar-btn" title="Add Text">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
-        <span className="text-xs ml-1">Text</span>
-      </button>
+      {/* Text dropdown */}
+      <div className="relative">
+        <button
+          onClick={() => setShowTextMenu(!showTextMenu)}
+          className="toolbar-btn"
+          title="Add Text"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+          <span className="text-xs ml-1">Text</span>
+          <svg width="10" height="10" viewBox="0 0 12 12" className="ml-0.5 opacity-50"><path d="M3 5l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="1.5"/></svg>
+        </button>
+
+        {showTextMenu && (
+          <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl shadow-lg border border-pink/20 py-2 z-50">
+            <button
+              onClick={() => {
+                canvasRef.current?.addText("Your text here");
+                setShowTextMenu(false);
+              }}
+              className="w-full text-left px-3 py-2 text-sm hover:bg-cream/50 text-foreground/70 cursor-pointer border-none bg-transparent"
+            >
+              Plain Text
+            </button>
+            <div className="h-px bg-pink/15 my-1" />
+            {TEXT_PRESETS.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => {
+                  canvasRef.current?.addText(preset.text, {
+                    fontFamily: preset.fontFamily,
+                    fontSize: preset.fontSize,
+                    fill: preset.fill,
+                    fontWeight: preset.fontWeight,
+                    fontStyle: preset.fontStyle,
+                    textAlign: preset.textAlign,
+                    charSpacing: preset.letterSpacing,
+                  });
+                  setShowTextMenu(false);
+                }}
+                className="w-full text-left px-3 py-1.5 hover:bg-cream/50 cursor-pointer border-none bg-transparent"
+              >
+                <span
+                  className="text-sm block truncate"
+                  style={{
+                    fontFamily: preset.fontFamily,
+                    color: preset.fill,
+                    fontStyle: preset.fontStyle,
+                    fontWeight: preset.fontWeight,
+                  }}
+                >
+                  {preset.name}
+                </span>
+                <span className="text-[10px] text-foreground/30">{preset.text.slice(0, 30)}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="w-px h-6 bg-pink/30 mx-1" />
 
@@ -89,8 +143,8 @@ export default function Toolbar({ canvasRef }: ToolbarProps) {
           background: none;
         }
         .toolbar-btn:hover {
-          background: #ffd1dc40;
-          color: #c9184a;
+          background: #f0dcc840;
+          color: #8b5e3c;
         }
       `}</style>
     </div>
