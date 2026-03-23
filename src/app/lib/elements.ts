@@ -7,501 +7,151 @@ export interface ElementItem {
 }
 
 export const ELEMENT_CATEGORIES = [
-  { id: "cute", name: "Cute", icon: "🐶" },
+  { id: "cute", name: "Cute Faces", icon: "🐶" },
+  { id: "hearts", name: "Hearts", icon: "♥" },
   { id: "leaves", name: "Leaves", icon: "🍂" },
+  { id: "flowers", name: "Flowers", icon: "🌸" },
   { id: "dividers", name: "Dividers", icon: "〰️" },
   { id: "shapes", name: "Shapes", icon: "●" },
-  { id: "flowers", name: "Flowers", icon: "🌸" },
   { id: "frames", name: "Frames", icon: "▢" },
   { id: "dots", name: "Dots", icon: "•••" },
+  { id: "stars", name: "Stars", icon: "✦" },
+  { id: "botanical", name: "Botanical", icon: "🌿" },
 ] as const;
 
+function makeLeaf(id: string, name: string, color: string, rot: number, rx: number, ry: number, tags: string[] = []): ElementItem {
+  return { id, name, category: "leaves", tags: ["leaf", ...tags], svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="50" rx="${rx}" ry="${ry}" fill="${color}" transform="rotate(${rot} 50 50)"/></svg>` };
+}
+function makeHeart(id: string, name: string, fill: string, opacity: number, outline: boolean, tags: string[] = []): ElementItem {
+  const p = "M50 82 C22 60 8 42 16 28 C24 14 38 17 50 30 C62 17 76 14 84 28 C92 42 78 60 50 82Z";
+  return { id, name, category: "hearts", tags: ["heart", ...tags], svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="${p}" fill="${outline?'none':fill}" ${outline?`stroke="${fill}" stroke-width="2"`:''} opacity="${opacity}"/></svg>` };
+}
+
 export const ELEMENTS: ElementItem[] = [
-  // === CUTE ANIMAL FACES (matching the example's puppy faces) ===
-  {
-    id: "puppy-face-1",
-    name: "Puppy Face",
-    category: "cute",
-    tags: ["puppy", "dog", "cute", "face"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="55" rx="22" ry="20" fill="#f0dcc8"/>
-      <ellipse cx="30" cy="40" rx="12" ry="16" fill="#c49a6c" transform="rotate(-15 30 40)"/>
-      <ellipse cx="70" cy="40" rx="12" ry="16" fill="#c49a6c" transform="rotate(15 70 40)"/>
-      <ellipse cx="33" cy="42" rx="9" ry="13" fill="#dbb896" transform="rotate(-15 33 42)"/>
-      <ellipse cx="67" cy="42" rx="9" ry="13" fill="#dbb896" transform="rotate(15 67 42)"/>
-      <circle cx="42" cy="52" r="3.5" fill="#5a3e28"/>
-      <circle cx="58" cy="52" r="3.5" fill="#5a3e28"/>
-      <circle cx="43" cy="51" r="1.2" fill="white"/>
-      <circle cx="59" cy="51" r="1.2" fill="white"/>
-      <ellipse cx="50" cy="60" rx="5" ry="3.5" fill="#c49a6c"/>
-      <circle cx="50" cy="59" r="2.5" fill="#8b5e3c"/>
-      <path d="M47 63 Q50 66 53 63" fill="none" stroke="#8b5e3c" stroke-width="1.2" stroke-linecap="round"/>
-      <circle cx="36" cy="58" r="4" fill="#e8b4a0" opacity="0.4"/>
-      <circle cx="64" cy="58" r="4" fill="#e8b4a0" opacity="0.4"/>
-    </svg>`,
-  },
-  {
-    id: "puppy-face-2",
-    name: "Puppy Side",
-    category: "cute",
-    tags: ["puppy", "dog", "cute"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="55" rx="20" ry="18" fill="#e8d4c0"/>
-      <ellipse cx="32" cy="38" rx="10" ry="15" fill="#b8845c" transform="rotate(-20 32 38)"/>
-      <ellipse cx="68" cy="38" rx="10" ry="15" fill="#b8845c" transform="rotate(20 68 38)"/>
-      <ellipse cx="35" cy="40" rx="7" ry="11" fill="#d4b896" transform="rotate(-20 35 40)"/>
-      <ellipse cx="65" cy="40" rx="7" ry="11" fill="#d4b896" transform="rotate(20 65 40)"/>
-      <circle cx="43" cy="52" r="3" fill="#4a3020"/>
-      <circle cx="57" cy="52" r="3" fill="#4a3020"/>
-      <circle cx="44" cy="51" r="1" fill="white"/>
-      <circle cx="58" cy="51" r="1" fill="white"/>
-      <circle cx="50" cy="59" r="2.8" fill="#9a6040"/>
-      <path d="M46 62 Q50 65 54 62" fill="none" stroke="#9a6040" stroke-width="1" stroke-linecap="round"/>
-      <circle cx="37" cy="57" r="3.5" fill="#e0a090" opacity="0.35"/>
-      <circle cx="63" cy="57" r="3.5" fill="#e0a090" opacity="0.35"/>
-    </svg>`,
-  },
-  {
-    id: "puppy-face-3",
-    name: "Puppy Small",
-    category: "cute",
-    tags: ["puppy", "dog", "small"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="52" rx="18" ry="16" fill="#f0dcc8"/>
-      <ellipse cx="34" cy="40" rx="9" ry="13" fill="#d4a878" transform="rotate(-12 34 40)"/>
-      <ellipse cx="66" cy="40" rx="9" ry="13" fill="#d4a878" transform="rotate(12 66 40)"/>
-      <circle cx="44" cy="50" r="2.5" fill="#5a3e28"/>
-      <circle cx="56" cy="50" r="2.5" fill="#5a3e28"/>
-      <circle cx="50" cy="56" r="2.2" fill="#9a6848"/>
-      <path d="M47 59 Q50 61 53 59" fill="none" stroke="#9a6848" stroke-width="1" stroke-linecap="round"/>
-    </svg>`,
-  },
-  {
-    id: "bunny-face",
-    name: "Bunny Face",
-    category: "cute",
-    tags: ["bunny", "rabbit", "cute"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="40" cy="25" rx="7" ry="18" fill="#f0dcc8"/>
-      <ellipse cx="60" cy="25" rx="7" ry="18" fill="#f0dcc8"/>
-      <ellipse cx="40" cy="25" rx="4" ry="12" fill="#e8b4a0" opacity="0.5"/>
-      <ellipse cx="60" cy="25" rx="4" ry="12" fill="#e8b4a0" opacity="0.5"/>
-      <ellipse cx="50" cy="55" rx="20" ry="18" fill="#f0dcc8"/>
-      <circle cx="43" cy="52" r="2.5" fill="#5a3e28"/>
-      <circle cx="57" cy="52" r="2.5" fill="#5a3e28"/>
-      <ellipse cx="50" cy="58" rx="3" ry="2" fill="#e0a090"/>
-      <path d="M47 60 Q50 63 53 60" fill="none" stroke="#c49080" stroke-width="1" stroke-linecap="round"/>
-      <circle cx="37" cy="56" r="3.5" fill="#e8b4a0" opacity="0.3"/>
-      <circle cx="63" cy="56" r="3.5" fill="#e8b4a0" opacity="0.3"/>
-    </svg>`,
-  },
-  {
-    id: "cat-face",
-    name: "Cat Face",
-    category: "cute",
-    tags: ["cat", "kitty", "cute"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="55" rx="22" ry="20" fill="#f0dcc8"/>
-      <polygon points="30,35 25,12 42,30" fill="#d4b090"/>
-      <polygon points="70,35 75,12 58,30" fill="#d4b090"/>
-      <polygon points="32,33 28,18 40,30" fill="#e8c8b0"/>
-      <polygon points="68,33 72,18 60,30" fill="#e8c8b0"/>
-      <circle cx="42" cy="52" r="3" fill="#5a3e28"/>
-      <circle cx="58" cy="52" r="3" fill="#5a3e28"/>
-      <ellipse cx="50" cy="58" rx="3" ry="2" fill="#d4a090"/>
-      <path d="M44 60 L50 62 L56 60" fill="none" stroke="#c49080" stroke-width="1"/>
-      <path d="M30 55 L42 57" stroke="#c4a088" stroke-width="0.5"/>
-      <path d="M30 58 L42 58" stroke="#c4a088" stroke-width="0.5"/>
-      <path d="M58 57 L70 55" stroke="#c4a088" stroke-width="0.5"/>
-      <path d="M58 58 L70 58" stroke="#c4a088" stroke-width="0.5"/>
-    </svg>`,
-  },
+  // CUTE FACES (20)
+  {id:"puppy-1",name:"Puppy",category:"cute",tags:["puppy","dog"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="22" ry="20" fill="#f0dcc8"/><ellipse cx="30" cy="40" rx="12" ry="16" fill="#c49a6c" transform="rotate(-15 30 40)"/><ellipse cx="70" cy="40" rx="12" ry="16" fill="#c49a6c" transform="rotate(15 70 40)"/><ellipse cx="33" cy="42" rx="9" ry="13" fill="#dbb896" transform="rotate(-15 33 42)"/><ellipse cx="67" cy="42" rx="9" ry="13" fill="#dbb896" transform="rotate(15 67 42)"/><circle cx="42" cy="52" r="3.5" fill="#5a3e28"/><circle cx="58" cy="52" r="3.5" fill="#5a3e28"/><circle cx="43" cy="51" r="1.2" fill="white"/><circle cx="59" cy="51" r="1.2" fill="white"/><ellipse cx="50" cy="60" rx="5" ry="3.5" fill="#c49a6c"/><circle cx="50" cy="59" r="2.5" fill="#8b5e3c"/><path d="M47 63 Q50 66 53 63" fill="none" stroke="#8b5e3c" stroke-width="1.2" stroke-linecap="round"/><circle cx="36" cy="58" r="4" fill="#e8b4a0" opacity="0.4"/><circle cx="64" cy="58" r="4" fill="#e8b4a0" opacity="0.4"/></svg>`},
+  {id:"puppy-2",name:"Puppy Brown",category:"cute",tags:["puppy","brown"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="20" ry="18" fill="#e8d4c0"/><ellipse cx="32" cy="38" rx="10" ry="15" fill="#8b5e3c" transform="rotate(-20 32 38)"/><ellipse cx="68" cy="38" rx="10" ry="15" fill="#8b5e3c" transform="rotate(20 68 38)"/><ellipse cx="35" cy="40" rx="7" ry="11" fill="#a07050" transform="rotate(-20 35 40)"/><ellipse cx="65" cy="40" rx="7" ry="11" fill="#a07050" transform="rotate(20 65 40)"/><circle cx="43" cy="52" r="3" fill="#4a3020"/><circle cx="57" cy="52" r="3" fill="#4a3020"/><circle cx="44" cy="51" r="1" fill="white"/><circle cx="58" cy="51" r="1" fill="white"/><circle cx="50" cy="59" r="2.8" fill="#6b4028"/><path d="M46 62 Q50 65 54 62" fill="none" stroke="#6b4028" stroke-width="1" stroke-linecap="round"/><circle cx="37" cy="57" r="3.5" fill="#e0a090" opacity="0.35"/><circle cx="63" cy="57" r="3.5" fill="#e0a090" opacity="0.35"/></svg>`},
+  {id:"puppy-3",name:"Puppy Small",category:"cute",tags:["puppy","small"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="52" rx="18" ry="16" fill="#f0dcc8"/><ellipse cx="34" cy="40" rx="9" ry="13" fill="#d4a878" transform="rotate(-12 34 40)"/><ellipse cx="66" cy="40" rx="9" ry="13" fill="#d4a878" transform="rotate(12 66 40)"/><circle cx="44" cy="50" r="2.5" fill="#5a3e28"/><circle cx="56" cy="50" r="2.5" fill="#5a3e28"/><circle cx="50" cy="56" r="2.2" fill="#9a6848"/><path d="M47 59 Q50 61 53 59" fill="none" stroke="#9a6848" stroke-width="1" stroke-linecap="round"/></svg>`},
+  {id:"puppy-4",name:"Puppy Pink",category:"cute",tags:["puppy","pink"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="22" ry="20" fill="#f5e0d8"/><ellipse cx="30" cy="40" rx="12" ry="16" fill="#d4a090" transform="rotate(-15 30 40)"/><ellipse cx="70" cy="40" rx="12" ry="16" fill="#d4a090" transform="rotate(15 70 40)"/><ellipse cx="33" cy="42" rx="9" ry="13" fill="#e8c0b0" transform="rotate(-15 33 42)"/><ellipse cx="67" cy="42" rx="9" ry="13" fill="#e8c0b0" transform="rotate(15 67 42)"/><circle cx="42" cy="52" r="3" fill="#5a3e28"/><circle cx="58" cy="52" r="3" fill="#5a3e28"/><circle cx="50" cy="59" r="2.5" fill="#c49080"/><path d="M47 62 Q50 65 53 62" fill="none" stroke="#c49080" stroke-width="1" stroke-linecap="round"/><circle cx="36" cy="58" r="4" fill="#f0c0b0" opacity="0.3"/><circle cx="64" cy="58" r="4" fill="#f0c0b0" opacity="0.3"/></svg>`},
+  {id:"puppy-5",name:"Puppy Dark",category:"cute",tags:["puppy","dark"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="20" ry="18" fill="#d4b898"/><ellipse cx="32" cy="38" rx="10" ry="15" fill="#6b4028" transform="rotate(-18 32 38)"/><ellipse cx="68" cy="38" rx="10" ry="15" fill="#6b4028" transform="rotate(18 68 38)"/><ellipse cx="34" cy="40" rx="7" ry="11" fill="#8b5e3c" transform="rotate(-18 34 40)"/><ellipse cx="66" cy="40" rx="7" ry="11" fill="#8b5e3c" transform="rotate(18 66 40)"/><circle cx="43" cy="52" r="3" fill="#3a2010"/><circle cx="57" cy="52" r="3" fill="#3a2010"/><circle cx="50" cy="59" r="2.5" fill="#5a3e28"/><path d="M47 62 Q50 64 53 62" fill="none" stroke="#5a3e28" stroke-width="1" stroke-linecap="round"/></svg>`},
+  {id:"bunny-1",name:"Bunny",category:"cute",tags:["bunny","rabbit"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="25" rx="7" ry="18" fill="#f0dcc8"/><ellipse cx="60" cy="25" rx="7" ry="18" fill="#f0dcc8"/><ellipse cx="40" cy="25" rx="4" ry="12" fill="#e8b4a0" opacity="0.5"/><ellipse cx="60" cy="25" rx="4" ry="12" fill="#e8b4a0" opacity="0.5"/><ellipse cx="50" cy="55" rx="20" ry="18" fill="#f0dcc8"/><circle cx="43" cy="52" r="2.5" fill="#5a3e28"/><circle cx="57" cy="52" r="2.5" fill="#5a3e28"/><ellipse cx="50" cy="58" rx="3" ry="2" fill="#e0a090"/><path d="M47 60 Q50 63 53 60" fill="none" stroke="#c49080" stroke-width="1" stroke-linecap="round"/><circle cx="37" cy="56" r="3.5" fill="#e8b4a0" opacity="0.3"/><circle cx="63" cy="56" r="3.5" fill="#e8b4a0" opacity="0.3"/></svg>`},
+  {id:"bunny-2",name:"Bunny Tan",category:"cute",tags:["bunny","tan"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="38" cy="22" rx="6" ry="17" fill="#dbb896"/><ellipse cx="62" cy="22" rx="6" ry="17" fill="#dbb896"/><ellipse cx="38" cy="22" rx="3.5" ry="11" fill="#d4a090" opacity="0.4"/><ellipse cx="62" cy="22" rx="3.5" ry="11" fill="#d4a090" opacity="0.4"/><ellipse cx="50" cy="54" rx="19" ry="17" fill="#dbb896"/><circle cx="43" cy="51" r="2.5" fill="#4a3020"/><circle cx="57" cy="51" r="2.5" fill="#4a3020"/><circle cx="50" cy="57" r="2" fill="#9a6848"/><path d="M47 59 Q50 62 53 59" fill="none" stroke="#9a6848" stroke-width="1" stroke-linecap="round"/></svg>`},
+  {id:"cat-1",name:"Cat",category:"cute",tags:["cat","kitty"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="22" ry="20" fill="#f0dcc8"/><polygon points="30,35 25,12 42,30" fill="#d4b090"/><polygon points="70,35 75,12 58,30" fill="#d4b090"/><polygon points="32,33 28,18 40,30" fill="#e8c8b0"/><polygon points="68,33 72,18 60,30" fill="#e8c8b0"/><circle cx="42" cy="52" r="3" fill="#5a3e28"/><circle cx="58" cy="52" r="3" fill="#5a3e28"/><circle cx="43" cy="51" r="1" fill="white"/><circle cx="59" cy="51" r="1" fill="white"/><ellipse cx="50" cy="58" rx="3" ry="2" fill="#d4a090"/><path d="M44 60 L50 62 L56 60" fill="none" stroke="#c49080" stroke-width="1"/><path d="M30 55 L42 57" stroke="#c4a088" stroke-width="0.5"/><path d="M30 58 L42 58" stroke="#c4a088" stroke-width="0.5"/><path d="M58 57 L70 55" stroke="#c4a088" stroke-width="0.5"/><path d="M58 58 L70 58" stroke="#c4a088" stroke-width="0.5"/></svg>`},
+  {id:"cat-2",name:"Cat Brown",category:"cute",tags:["cat","brown"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="20" ry="18" fill="#dbb896"/><polygon points="31,36 27,15 41,32" fill="#a07050"/><polygon points="69,36 73,15 59,32" fill="#a07050"/><circle cx="43" cy="52" r="2.5" fill="#4a3020"/><circle cx="57" cy="52" r="2.5" fill="#4a3020"/><ellipse cx="50" cy="57" rx="2.5" ry="1.8" fill="#9a6848"/><path d="M45 59 L50 61 L55 59" fill="none" stroke="#8b5e3c" stroke-width="0.8"/></svg>`},
+  {id:"bear-1",name:"Bear",category:"cute",tags:["bear"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="10" fill="#c49a6c"/><circle cx="68" cy="32" r="10" fill="#c49a6c"/><circle cx="32" cy="32" r="6" fill="#dbb896"/><circle cx="68" cy="32" r="6" fill="#dbb896"/><ellipse cx="50" cy="55" rx="24" ry="22" fill="#c49a6c"/><ellipse cx="50" cy="60" rx="12" ry="10" fill="#dbb896"/><circle cx="42" cy="50" r="3" fill="#4a3020"/><circle cx="58" cy="50" r="3" fill="#4a3020"/><circle cx="43" cy="49" r="1" fill="white"/><circle cx="59" cy="49" r="1" fill="white"/><ellipse cx="50" cy="58" rx="4" ry="3" fill="#8b5e3c"/><path d="M47 62 Q50 65 53 62" fill="none" stroke="#6b4028" stroke-width="1" stroke-linecap="round"/></svg>`},
+  {id:"bear-2",name:"Bear Small",category:"cute",tags:["bear","small"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="34" cy="34" r="8" fill="#d4a878"/><circle cx="66" cy="34" r="8" fill="#d4a878"/><ellipse cx="50" cy="54" rx="20" ry="18" fill="#d4a878"/><circle cx="43" cy="50" r="2.5" fill="#4a3020"/><circle cx="57" cy="50" r="2.5" fill="#4a3020"/><circle cx="50" cy="56" r="2" fill="#6b4028"/><path d="M47 59 Q50 61 53 59" fill="none" stroke="#6b4028" stroke-width="1" stroke-linecap="round"/></svg>`},
+  {id:"fox-1",name:"Fox",category:"cute",tags:["fox"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="58" rx="22" ry="18" fill="#d4a060"/><polygon points="28,40 20,12 42,34" fill="#c49040"/><polygon points="72,40 80,12 58,34" fill="#c49040"/><ellipse cx="50" cy="62" rx="12" ry="10" fill="#f0e4d4"/><circle cx="40" cy="52" r="3" fill="#4a3020"/><circle cx="60" cy="52" r="3" fill="#4a3020"/><circle cx="41" cy="51" r="1" fill="white"/><circle cx="61" cy="51" r="1" fill="white"/><circle cx="50" cy="58" r="2.5" fill="#3a2010"/><path d="M47 61 Q50 63 53 61" fill="none" stroke="#3a2010" stroke-width="1" stroke-linecap="round"/></svg>`},
+  {id:"deer-1",name:"Deer",category:"cute",tags:["deer","fawn"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="58" rx="20" ry="18" fill="#dbb896"/><ellipse cx="35" cy="42" rx="8" ry="12" fill="#dbb896" transform="rotate(-10 35 42)"/><ellipse cx="65" cy="42" rx="8" ry="12" fill="#dbb896" transform="rotate(10 65 42)"/><path d="M38 30 L35 15 L32 22 L30 12" fill="none" stroke="#8b5e3c" stroke-width="1.5" stroke-linecap="round"/><path d="M62 30 L65 15 L68 22 L70 12" fill="none" stroke="#8b5e3c" stroke-width="1.5" stroke-linecap="round"/><circle cx="43" cy="54" r="3" fill="#4a3020"/><circle cx="57" cy="54" r="3" fill="#4a3020"/><circle cx="50" cy="62" r="2.5" fill="#8b5e3c"/><circle cx="38" cy="58" r="3" fill="#e8c0b0" opacity="0.3"/><circle cx="62" cy="58" r="3" fill="#e8c0b0" opacity="0.3"/></svg>`},
+  {id:"owl-1",name:"Owl",category:"cute",tags:["owl","bird"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="24" ry="22" fill="#c49a6c"/><ellipse cx="50" cy="60" rx="16" ry="14" fill="#dbb896"/><circle cx="40" cy="48" r="8" fill="white"/><circle cx="60" cy="48" r="8" fill="white"/><circle cx="40" cy="48" r="4" fill="#4a3020"/><circle cx="60" cy="48" r="4" fill="#4a3020"/><circle cx="41" cy="47" r="1.5" fill="white"/><circle cx="61" cy="47" r="1.5" fill="white"/><polygon points="50,55 47,60 53,60" fill="#d4a060"/><polygon points="30,35 35,28 40,38" fill="#a07050"/><polygon points="70,35 65,28 60,38" fill="#a07050"/></svg>`},
+  {id:"panda-1",name:"Panda",category:"cute",tags:["panda"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="34" r="10" fill="#5a4838"/><circle cx="68" cy="34" r="10" fill="#5a4838"/><ellipse cx="50" cy="55" rx="24" ry="22" fill="#f5ece0"/><ellipse cx="40" cy="50" rx="8" ry="7" fill="#5a4838"/><ellipse cx="60" cy="50" rx="8" ry="7" fill="#5a4838"/><circle cx="40" cy="50" r="3.5" fill="white"/><circle cx="60" cy="50" r="3.5" fill="white"/><circle cx="40" cy="50" r="2" fill="#3a2010"/><circle cx="60" cy="50" r="2" fill="#3a2010"/><ellipse cx="50" cy="60" rx="3" ry="2" fill="#5a4838"/></svg>`},
+  {id:"chick-1",name:"Chick",category:"cute",tags:["chick","bird"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="22" ry="20" fill="#f5d77a"/><ellipse cx="50" cy="32" rx="5" ry="8" fill="#f5d77a"/><circle cx="43" cy="50" r="2.5" fill="#4a3020"/><circle cx="57" cy="50" r="2.5" fill="#4a3020"/><polygon points="50,56 46,60 54,60" fill="#d4a060"/><circle cx="37" cy="55" r="3" fill="#f0c0a0" opacity="0.3"/><circle cx="63" cy="55" r="3" fill="#f0c0a0" opacity="0.3"/></svg>`},
+  {id:"hedgehog-1",name:"Hedgehog",category:"cute",tags:["hedgehog"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="60" rx="28" ry="20" fill="#a07050"/><path d="M25 50 L20 35 L30 45 L25 30 L35 42 L32 28 L40 40 L40 25 L45 38 L48 22 L50 38 L52 22 L55 38 L60 25 L60 40 L68 28 L65 42 L75 30 L70 45 L80 35 L75 50" fill="#8b5e3c"/><ellipse cx="50" cy="62" rx="16" ry="12" fill="#f0dcc8"/><circle cx="42" cy="58" r="2.5" fill="#3a2010"/><circle cx="56" cy="58" r="2.5" fill="#3a2010"/><circle cx="49" cy="64" r="2" fill="#6b4028"/></svg>`},
+  {id:"koala-1",name:"Koala",category:"cute",tags:["koala"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="28" cy="40" r="12" fill="#a09890"/><circle cx="72" cy="40" r="12" fill="#a09890"/><circle cx="28" cy="40" r="7" fill="#c4b8b0"/><circle cx="72" cy="40" r="7" fill="#c4b8b0"/><ellipse cx="50" cy="55" rx="22" ry="20" fill="#a09890"/><circle cx="42" cy="50" r="2.5" fill="#3a2820"/><circle cx="58" cy="50" r="2.5" fill="#3a2820"/><ellipse cx="50" cy="58" rx="5" ry="4" fill="#6b5040"/><circle cx="50" cy="56" r="2.5" fill="#4a3020"/></svg>`},
+  {id:"sloth-1",name:"Sloth",category:"cute",tags:["sloth"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="55" rx="24" ry="22" fill="#c49a6c"/><ellipse cx="50" cy="55" rx="18" ry="16" fill="#dbb896"/><ellipse cx="38" cy="50" rx="7" ry="6" fill="#8b5e3c" opacity="0.4"/><ellipse cx="62" cy="50" rx="7" ry="6" fill="#8b5e3c" opacity="0.4"/><circle cx="40" cy="50" r="2" fill="#3a2010"/><circle cx="60" cy="50" r="2" fill="#3a2010"/><ellipse cx="50" cy="58" rx="3" ry="2" fill="#6b4028"/><path d="M46 61 Q50 64 54 61" fill="none" stroke="#6b4028" stroke-width="1" stroke-linecap="round"/></svg>`},
 
-  // === LEAVES (earthy brown/olive/pink tones matching example) ===
-  {
-    id: "leaf-brown-1",
-    name: "Brown Leaf",
-    category: "leaves",
-    tags: ["leaf", "brown", "earthy"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="50" rx="12" ry="30" fill="#8b5e3c" transform="rotate(-30 50 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-brown-2",
-    name: "Dark Leaf",
-    category: "leaves",
-    tags: ["leaf", "brown", "dark"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="50" rx="10" ry="25" fill="#6b4028" transform="rotate(20 50 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-olive-1",
-    name: "Olive Leaf",
-    category: "leaves",
-    tags: ["leaf", "olive", "green"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="50" rx="11" ry="28" fill="#a09060" transform="rotate(-20 50 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-olive-2",
-    name: "Sage Leaf",
-    category: "leaves",
-    tags: ["leaf", "sage", "muted"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="50" rx="10" ry="24" fill="#b8a878" transform="rotate(35 50 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-pink-1",
-    name: "Pink Leaf",
-    category: "leaves",
-    tags: ["leaf", "pink", "blush"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="50" rx="11" ry="26" fill="#d4a090" transform="rotate(-25 50 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-pink-2",
-    name: "Rose Leaf",
-    category: "leaves",
-    tags: ["leaf", "rose", "dusty"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="50" rx="9" ry="22" fill="#c89080" transform="rotate(15 50 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-cluster-brown",
-    name: "Brown Cluster",
-    category: "leaves",
-    tags: ["leaf", "cluster", "brown", "corner"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="40" cy="35" rx="9" ry="22" fill="#8b5e3c" transform="rotate(-40 40 35)"/>
-      <ellipse cx="55" cy="30" rx="8" ry="20" fill="#6b4028" transform="rotate(-15 55 30)"/>
-      <ellipse cx="60" cy="50" rx="9" ry="22" fill="#a07050" transform="rotate(10 60 50)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-cluster-olive",
-    name: "Olive Cluster",
-    category: "leaves",
-    tags: ["leaf", "cluster", "olive", "corner"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="55" cy="35" rx="9" ry="22" fill="#a09060" transform="rotate(30 55 35)"/>
-      <ellipse cx="40" cy="30" rx="8" ry="20" fill="#b8a878" transform="rotate(10 40 30)"/>
-      <ellipse cx="45" cy="55" rx="9" ry="22" fill="#c0a868" transform="rotate(-10 45 55)"/>
-    </svg>`,
-  },
-  {
-    id: "leaf-cluster-mixed",
-    name: "Mixed Cluster",
-    category: "leaves",
-    tags: ["leaf", "cluster", "mixed", "corner"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="35" cy="40" rx="8" ry="20" fill="#8b5e3c" transform="rotate(-35 35 40)"/>
-      <ellipse cx="55" cy="30" rx="7" ry="18" fill="#d4a090" transform="rotate(-10 55 30)"/>
-      <ellipse cx="50" cy="55" rx="8" ry="20" fill="#a09060" transform="rotate(15 50 55)"/>
-      <ellipse cx="65" cy="45" rx="7" ry="16" fill="#c89080" transform="rotate(30 65 45)"/>
-    </svg>`,
-  },
-  {
-    id: "eucalyptus-stem",
-    name: "Eucalyptus",
-    category: "leaves",
-    tags: ["eucalyptus", "stem", "botanical"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <line x1="50" y1="10" x2="50" y2="90" stroke="#8a7a5a" stroke-width="1.5"/>
-      <ellipse cx="42" cy="20" rx="7" ry="4" fill="#b8a878" transform="rotate(-20 42 20)"/>
-      <ellipse cx="58" cy="30" rx="7" ry="4" fill="#a09060" transform="rotate(20 58 30)"/>
-      <ellipse cx="42" cy="40" rx="7" ry="4" fill="#b8a878" transform="rotate(-20 42 40)"/>
-      <ellipse cx="58" cy="50" rx="8" ry="4.5" fill="#a09060" transform="rotate(20 58 50)"/>
-      <ellipse cx="42" cy="60" rx="8" ry="4.5" fill="#b8a878" transform="rotate(-20 42 60)"/>
-      <ellipse cx="58" cy="70" rx="9" ry="5" fill="#a09060" transform="rotate(20 58 70)"/>
-      <ellipse cx="42" cy="80" rx="9" ry="5" fill="#b8a878" transform="rotate(-20 42 80)"/>
-    </svg>`,
-  },
+  // HEARTS (15)
+  makeHeart("heart-brown","Brown Heart","#8b5e3c",0.8,false),
+  makeHeart("heart-pink","Pink Heart","#d4a090",0.7,false),
+  makeHeart("heart-blush","Blush Heart","#e8c0b0",0.6,false),
+  makeHeart("heart-olive","Olive Heart","#a09060",0.6,false),
+  makeHeart("heart-cream","Cream Heart","#f0dcc8",0.8,false),
+  makeHeart("heart-gold","Gold Heart","#d4a878",0.7,false),
+  makeHeart("heart-dusty","Dusty Heart","#c49080",0.7,false),
+  makeHeart("heart-tan","Tan Heart","#dbb896",0.6,false),
+  makeHeart("heart-outline-b","Heart Outline","#8b5e3c",0.7,true,["outline"]),
+  makeHeart("heart-outline-p","Pink Outline","#d4a090",0.6,true,["outline"]),
+  makeHeart("heart-outline-g","Gold Outline","#d4a878",0.6,true,["outline"]),
+  makeHeart("heart-outline-o","Olive Outline","#a09060",0.5,true,["outline"]),
+  {id:"heart-double",name:"Double Heart",category:"hearts",tags:["heart","double"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M40 75 C15 55 3 40 10 28 C17 16 28 18 40 30 C52 18 63 16 70 28 C77 40 65 55 40 75Z" fill="#d4a090" opacity="0.5"/><path d="M60 70 C38 52 28 40 34 30 C40 20 50 22 60 32 C70 22 80 20 86 30 C92 40 82 52 60 70Z" fill="#c49080" opacity="0.5"/></svg>`},
+  {id:"heart-row",name:"Heart Row",category:"hearts",tags:["heart","row"],svg:`<svg viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg"><path d="M20 30 C10 22 5 16 9 11 C13 6 17 8 20 14 C23 8 27 6 31 11 C35 16 30 22 20 30Z" fill="#d4a090" opacity="0.5"/><path d="M60 28 C52 22 48 17 51 13 C54 9 57 10 60 15 C63 10 66 9 69 13 C72 17 68 22 60 28Z" fill="#c49080" opacity="0.4"/><path d="M100 30 C90 22 85 16 89 11 C93 6 97 8 100 14 C103 8 107 6 111 11 C115 16 110 22 100 30Z" fill="#d4a878" opacity="0.5"/><path d="M140 28 C132 22 128 17 131 13 C134 9 137 10 140 15 C143 10 146 9 149 13 C152 17 148 22 140 28Z" fill="#d4a090" opacity="0.4"/><path d="M180 30 C170 22 165 16 169 11 C173 6 177 8 180 14 C183 8 187 6 191 11 C195 16 190 22 180 30Z" fill="#c49080" opacity="0.5"/></svg>`},
+  {id:"heart-scatter",name:"Scattered Hearts",category:"hearts",tags:["heart","scatter"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M25 35 C18 28 14 23 17 19 C20 15 23 16 25 21 C27 16 30 15 33 19 C36 23 32 28 25 35Z" fill="#d4a090" opacity="0.5"/><path d="M70 25 C65 20 63 17 65 14 C67 11 69 12 70 15 C71 12 73 11 75 14 C77 17 75 20 70 25Z" fill="#c49080" opacity="0.4"/><path d="M55 75 C48 68 44 63 47 59 C50 55 53 56 55 61 C57 56 60 55 63 59 C66 63 62 68 55 75Z" fill="#d4a878" opacity="0.5"/><path d="M20 70 C16 67 15 64 16 62 C17 60 19 61 20 63 C21 61 23 60 24 62 C25 64 24 67 20 70Z" fill="#e8c0b0" opacity="0.4"/></svg>`},
 
-  // === DIVIDERS & LINES ===
-  {
-    id: "line-thin",
-    name: "Thin Line",
-    category: "dividers",
-    tags: ["line", "divider", "thin"],
-    svg: `<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="10" x2="190" y2="10" stroke="#c4a888" stroke-width="1"/>
-    </svg>`,
-  },
-  {
-    id: "line-double",
-    name: "Double Line",
-    category: "dividers",
-    tags: ["line", "divider", "double"],
-    svg: `<svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="10" x2="190" y2="10" stroke="#c4a888" stroke-width="1"/>
-      <line x1="10" y1="18" x2="190" y2="18" stroke="#c4a888" stroke-width="1"/>
-    </svg>`,
-  },
-  {
-    id: "line-dashed",
-    name: "Dashed Line",
-    category: "dividers",
-    tags: ["line", "divider", "dashed"],
-    svg: `<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="10" x2="190" y2="10" stroke="#b8a070" stroke-width="1.5" stroke-dasharray="6,4"/>
-    </svg>`,
-  },
-  {
-    id: "line-dots",
-    name: "Dotted Line",
-    category: "dividers",
-    tags: ["line", "divider", "dotted"],
-    svg: `<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="10" x2="190" y2="10" stroke="#c4a888" stroke-width="1.5" stroke-dasharray="2,6"/>
-    </svg>`,
-  },
-  {
-    id: "line-dot-center",
-    name: "Line with Dot",
-    category: "dividers",
-    tags: ["line", "divider", "dot", "center"],
-    svg: `<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10" y1="10" x2="90" y2="10" stroke="#c4a888" stroke-width="1"/>
-      <circle cx="100" cy="10" r="2.5" fill="#c4a888"/>
-      <line x1="110" y1="10" x2="190" y2="10" stroke="#c4a888" stroke-width="1"/>
-    </svg>`,
-  },
-  {
-    id: "line-ornament",
-    name: "Ornament Line",
-    category: "dividers",
-    tags: ["line", "divider", "ornament"],
-    svg: `<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
-      <line x1="20" y1="10" x2="85" y2="10" stroke="#c4a888" stroke-width="0.8"/>
-      <circle cx="92" cy="10" r="2" fill="#c4a888"/>
-      <circle cx="100" cy="10" r="3" fill="#c4a888"/>
-      <circle cx="108" cy="10" r="2" fill="#c4a888"/>
-      <line x1="115" y1="10" x2="180" y2="10" stroke="#c4a888" stroke-width="0.8"/>
-    </svg>`,
-  },
-  {
-    id: "vertical-lines",
-    name: "Vertical Lines",
-    category: "dividers",
-    tags: ["vertical", "lines", "decoration"],
-    svg: `<svg viewBox="0 0 30 100" xmlns="http://www.w3.org/2000/svg">
-      <line x1="12" y1="10" x2="12" y2="90" stroke="#6b5040" stroke-width="1.5"/>
-      <line x1="18" y1="10" x2="18" y2="90" stroke="#6b5040" stroke-width="1.5"/>
-    </svg>`,
-  },
+  // LEAVES (30)
+  makeLeaf("lb1","Brown Leaf","#8b5e3c",-30,12,30),makeLeaf("lb2","Brown Leaf 2","#6b4028",20,10,25),makeLeaf("lb3","Brown Leaf 3","#a07050",-45,11,28),makeLeaf("lb4","Brown Leaf 4","#7a5030",35,10,26),makeLeaf("lb5","Brown Leaf 5","#9a6848",-15,13,30),makeLeaf("lb6","Brown Thin","#8b5e3c",40,8,28),makeLeaf("lb7","Brown Wide","#6b4028",-10,14,24),makeLeaf("lb8","Brown Tiny","#a07050",25,8,18,["small"]),
+  makeLeaf("lo1","Olive Leaf","#a09060",-20,11,28),makeLeaf("lo2","Sage Leaf","#b8a878",35,10,24),makeLeaf("lo3","Olive Dark","#808050",-40,12,30),makeLeaf("lo4","Olive Light","#c0a868",15,11,26),makeLeaf("lo5","Sage Thin","#a09060",50,8,28),makeLeaf("lo6","Olive Tiny","#b8a878",-25,8,18,["small"]),makeLeaf("lo7","Sage Wide","#908848",10,14,22),
+  makeLeaf("lp1","Pink Leaf","#d4a090",-25,11,26),makeLeaf("lp2","Rose Leaf","#c89080",15,9,22),makeLeaf("lp3","Blush Leaf","#e8b4a0",-35,12,28),makeLeaf("lp4","Dusty Leaf","#c49080",30,10,24),makeLeaf("lp5","Pink Tiny","#d4a090",-10,8,18,["small"]),makeLeaf("lp6","Rose Wide","#c89080",45,13,22),
+  {id:"cluster-brown",name:"Brown Cluster",category:"leaves",tags:["cluster","corner"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="35" rx="9" ry="22" fill="#8b5e3c" transform="rotate(-40 40 35)"/><ellipse cx="55" cy="30" rx="8" ry="20" fill="#6b4028" transform="rotate(-15 55 30)"/><ellipse cx="60" cy="50" rx="9" ry="22" fill="#a07050" transform="rotate(10 60 50)"/></svg>`},
+  {id:"cluster-olive",name:"Olive Cluster",category:"leaves",tags:["cluster","corner"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="55" cy="35" rx="9" ry="22" fill="#a09060" transform="rotate(30 55 35)"/><ellipse cx="40" cy="30" rx="8" ry="20" fill="#b8a878" transform="rotate(10 40 30)"/><ellipse cx="45" cy="55" rx="9" ry="22" fill="#c0a868" transform="rotate(-10 45 55)"/></svg>`},
+  {id:"cluster-mixed",name:"Mixed Cluster",category:"leaves",tags:["cluster","corner"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="35" cy="40" rx="8" ry="20" fill="#8b5e3c" transform="rotate(-35 35 40)"/><ellipse cx="55" cy="30" rx="7" ry="18" fill="#d4a090" transform="rotate(-10 55 30)"/><ellipse cx="50" cy="55" rx="8" ry="20" fill="#a09060" transform="rotate(15 50 55)"/><ellipse cx="65" cy="45" rx="7" ry="16" fill="#c89080" transform="rotate(30 65 45)"/></svg>`},
+  {id:"cluster-pink",name:"Pink Cluster",category:"leaves",tags:["cluster","corner"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="35" rx="9" ry="22" fill="#d4a090" transform="rotate(-35 40 35)"/><ellipse cx="58" cy="32" rx="8" ry="20" fill="#c89080" transform="rotate(-5 58 32)"/><ellipse cx="55" cy="55" rx="9" ry="20" fill="#e8b4a0" transform="rotate(20 55 55)"/></svg>`},
+  {id:"cluster-large",name:"Large Cluster",category:"leaves",tags:["cluster","corner"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="30" rx="8" ry="22" fill="#8b5e3c" transform="rotate(-50 30 30)"/><ellipse cx="50" cy="22" rx="7" ry="20" fill="#d4a090" transform="rotate(-20 50 22)"/><ellipse cx="70" cy="30" rx="8" ry="22" fill="#a09060" transform="rotate(10 70 30)"/><ellipse cx="35" cy="55" rx="9" ry="20" fill="#c49080" transform="rotate(-25 35 55)"/><ellipse cx="60" cy="55" rx="8" ry="22" fill="#b8a878" transform="rotate(25 60 55)"/></svg>`},
 
-  // === SHAPES ===
-  {
-    id: "circle-cream",
-    name: "Cream Circle",
-    category: "shapes",
-    tags: ["circle", "cream", "background"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="42" fill="#f0e4d4" opacity="0.6"/>
-    </svg>`,
-  },
-  {
-    id: "circle-blush",
-    name: "Blush Circle",
-    category: "shapes",
-    tags: ["circle", "blush", "pink"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="42" fill="#f0d0c0" opacity="0.4"/>
-    </svg>`,
-  },
-  {
-    id: "heart-1",
-    name: "Heart",
-    category: "shapes",
-    tags: ["heart", "love"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 85 C20 60 5 40 15 25 C25 10 40 15 50 30 C60 15 75 10 85 25 C95 40 80 60 50 85Z" fill="#d4a090" opacity="0.7"/>
-    </svg>`,
-  },
-  {
-    id: "heart-outline",
-    name: "Heart Outline",
-    category: "shapes",
-    tags: ["heart", "outline"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 85 C20 60 5 40 15 25 C25 10 40 15 50 30 C60 15 75 10 85 25 C95 40 80 60 50 85Z" fill="none" stroke="#c49080" stroke-width="1.5"/>
-    </svg>`,
-  },
-  {
-    id: "star-1",
-    name: "Star",
-    category: "shapes",
-    tags: ["star", "sparkle"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="50,15 58,40 85,40 63,55 72,80 50,65 28,80 37,55 15,40 42,40" fill="#d4a878" opacity="0.7"/>
-    </svg>`,
-  },
-  {
-    id: "arch-1",
-    name: "Arch",
-    category: "shapes",
-    tags: ["arch", "modern", "boho"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M25 90 L25 45 Q25 15 50 15 Q75 15 75 45 L75 90Z" fill="#f0e4d4" opacity="0.4"/>
-    </svg>`,
-  },
-  {
-    id: "crescent-1",
-    name: "Crescent Moon",
-    category: "shapes",
-    tags: ["moon", "crescent"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M60 15 A35 35 0 1 0 60 85 A28 28 0 1 1 60 15Z" fill="#d4a878" opacity="0.5"/>
-    </svg>`,
-  },
+  // FLOWERS (10)
+  {id:"cherry-blossom",name:"Cherry Blossom",category:"flowers",tags:["flower","cherry"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(50,50)"><ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8"/><ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(72)"/><ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(144)"/><ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(216)"/><ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(288)"/><circle cx="0" cy="0" r="5" fill="#c49070"/></g></svg>`},
+  {id:"daisy-earthy",name:"Earthy Daisy",category:"flowers",tags:["flower","daisy"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(50,50)"><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(45)"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(90)"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(135)"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(180)"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(225)"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(270)"/><ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(315)"/><circle cx="0" cy="0" r="7" fill="#c4a060"/></g></svg>`},
+  {id:"rose-earthy",name:"Earthy Rose",category:"flowers",tags:["flower","rose"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="20" fill="#d4a090" opacity="0.4"/><circle cx="48" cy="47" r="14" fill="#c89080" opacity="0.5"/><circle cx="52" cy="48" r="12" fill="#d4a090" opacity="0.5"/><circle cx="50" cy="50" r="8" fill="#e0b8a8" opacity="0.6"/><circle cx="50" cy="49" r="4" fill="#e8c8b8"/></svg>`},
+  {id:"wildflower-1",name:"Wildflower",category:"flowers",tags:["flower","wild"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="50" y1="90" x2="50" y2="45" stroke="#8a7a5a" stroke-width="1.5"/><g transform="translate(50,38)"><circle cx="0" cy="-5" r="3" fill="#d4a090"/><circle cx="4" cy="-1" r="3" fill="#d4a090"/><circle cx="2" cy="4" r="3" fill="#d4a090"/><circle cx="-2" cy="4" r="3" fill="#d4a090"/><circle cx="-4" cy="-1" r="3" fill="#d4a090"/><circle cx="0" cy="0" r="2" fill="#c4a060"/></g></svg>`},
+  {id:"tulip-1",name:"Tulip",category:"flowers",tags:["flower","tulip"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M45 40 Q42 25 50 15 Q58 25 55 40Z" fill="#c49080"/><path d="M42 40 Q50 45 58 40 Q55 48 50 50 Q45 48 42 40Z" fill="#a07060"/><line x1="50" y1="50" x2="50" y2="88" stroke="#8a7a5a" stroke-width="2"/><ellipse cx="38" cy="68" rx="5" ry="3" fill="#a09060" transform="rotate(-20 38 68)"/></svg>`},
+  {id:"lavender-1",name:"Lavender",category:"flowers",tags:["flower","lavender"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="50" y1="95" x2="50" y2="25" stroke="#8a7a5a" stroke-width="1.5"/><ellipse cx="50" cy="28" rx="3" ry="4" fill="#b49caa"/><ellipse cx="48" cy="34" rx="3" ry="4" fill="#c0a8b4"/><ellipse cx="52" cy="34" rx="3" ry="4" fill="#c0a8b4"/><ellipse cx="49" cy="41" rx="3" ry="4" fill="#ccb8c4"/><ellipse cx="51" cy="41" rx="3" ry="4" fill="#ccb8c4"/><ellipse cx="48" cy="48" rx="3" ry="4" fill="#d8c8d0"/><ellipse cx="52" cy="48" rx="3" ry="4" fill="#d8c8d0"/></svg>`},
+  {id:"cotton-1",name:"Cotton",category:"flowers",tags:["flower","cotton"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="50" y1="90" x2="50" y2="50" stroke="#6b5040" stroke-width="2"/><circle cx="45" cy="40" r="8" fill="#f0e4d4"/><circle cx="55" cy="38" r="8" fill="#f0e4d4"/><circle cx="50" cy="45" r="8" fill="#f5ece0"/><circle cx="42" cy="46" r="6" fill="#e8dcc8"/><circle cx="58" cy="44" r="6" fill="#e8dcc8"/></svg>`},
+  {id:"wildflower-spray",name:"Wildflower Spray",category:"flowers",tags:["flower","spray"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="50" y1="90" x2="50" y2="45" stroke="#8a7a5a" stroke-width="1.5"/><line x1="50" y1="65" x2="35" y2="50" stroke="#8a7a5a" stroke-width="1"/><line x1="50" y1="72" x2="65" y2="55" stroke="#8a7a5a" stroke-width="1"/><g transform="translate(50,38)"><circle cx="0" cy="-5" r="3.5" fill="#c49080"/><circle cx="4" cy="0" r="3.5" fill="#c49080"/><circle cx="-4" cy="0" r="3.5" fill="#c49080"/><circle cx="0" cy="0" r="2.5" fill="#d4a878"/></g><g transform="translate(35,45) scale(0.7)"><circle cx="0" cy="-4" r="3" fill="#d4a090"/><circle cx="3" cy="0" r="3" fill="#d4a090"/><circle cx="-3" cy="0" r="3" fill="#d4a090"/><circle cx="0" cy="0" r="2" fill="#c4a060"/></g><g transform="translate(65,50) scale(0.6)"><circle cx="0" cy="-4" r="3" fill="#e8c0b0"/><circle cx="3" cy="0" r="3" fill="#e8c0b0"/><circle cx="-3" cy="0" r="3" fill="#e8c0b0"/><circle cx="0" cy="0" r="2" fill="#c4a060"/></g></svg>`},
+  {id:"sunflower-1",name:"Sunflower",category:"flowers",tags:["flower","sunflower"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(50,42)"><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#d4a878"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#d4a878" transform="rotate(30)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#d4a878" transform="rotate(60)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#d4a878" transform="rotate(90)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#d4a878" transform="rotate(120)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#d4a878" transform="rotate(150)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#c49a6c" transform="rotate(15)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#c49a6c" transform="rotate(45)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#c49a6c" transform="rotate(75)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#c49a6c" transform="rotate(105)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#c49a6c" transform="rotate(135)"/><ellipse cx="0" cy="-16" rx="5" ry="11" fill="#c49a6c" transform="rotate(165)"/><circle cx="0" cy="0" r="8" fill="#6b5040"/></g><line x1="50" y1="58" x2="50" y2="92" stroke="#6b5040" stroke-width="2.5"/></svg>`},
+  {id:"peony-1",name:"Peony",category:"flowers",tags:["flower","peony"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="45" r="22" fill="#e8c0b0" opacity="0.35"/><circle cx="45" cy="42" r="14" fill="#d4a090" opacity="0.5"/><circle cx="55" cy="42" r="14" fill="#d4a090" opacity="0.5"/><circle cx="50" cy="48" r="12" fill="#e8c0b0" opacity="0.5"/><circle cx="48" cy="44" r="8" fill="#f0d0c0" opacity="0.6"/><circle cx="52" cy="44" r="8" fill="#f0d0c0" opacity="0.6"/><circle cx="50" cy="45" r="4" fill="#f5e0d8"/></svg>`},
 
-  // === FLOWERS (earthy/boho style) ===
-  {
-    id: "cherry-blossom-1",
-    name: "Cherry Blossom",
-    category: "flowers",
-    tags: ["flower", "cherry", "blossom", "pink"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(50,50)">
-        <ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8"/>
-        <ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(72)"/>
-        <ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(144)"/>
-        <ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(216)"/>
-        <ellipse cx="0" cy="-15" rx="6" ry="12" fill="#e8c0b0" opacity="0.8" transform="rotate(288)"/>
-        <circle cx="0" cy="0" r="5" fill="#c49070"/>
-      </g>
-    </svg>`,
-  },
-  {
-    id: "daisy-earthy",
-    name: "Earthy Daisy",
-    category: "flowers",
-    tags: ["flower", "daisy", "earthy"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(50,50)">
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(45)"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(90)"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(135)"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(180)"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(225)"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(270)"/>
-        <ellipse cx="0" cy="-16" rx="5" ry="12" fill="#f0e0d0" transform="rotate(315)"/>
-        <circle cx="0" cy="0" r="7" fill="#c4a060"/>
-      </g>
-    </svg>`,
-  },
-  {
-    id: "rose-earthy",
-    name: "Earthy Rose",
-    category: "flowers",
-    tags: ["flower", "rose", "earthy"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="20" fill="#d4a090" opacity="0.4"/>
-      <circle cx="48" cy="47" r="14" fill="#c89080" opacity="0.5"/>
-      <circle cx="52" cy="48" r="12" fill="#d4a090" opacity="0.5"/>
-      <circle cx="50" cy="50" r="8" fill="#e0b8a8" opacity="0.6"/>
-      <circle cx="50" cy="49" r="4" fill="#e8c8b8"/>
-    </svg>`,
-  },
-  {
-    id: "wildflower-boho",
-    name: "Boho Wildflower",
-    category: "flowers",
-    tags: ["flower", "boho", "wild"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <line x1="50" y1="90" x2="50" y2="45" stroke="#8a7a5a" stroke-width="1.5"/>
-      <line x1="50" y1="65" x2="35" y2="55" stroke="#8a7a5a" stroke-width="1"/>
-      <line x1="50" y1="75" x2="65" y2="62" stroke="#8a7a5a" stroke-width="1"/>
-      <g transform="translate(50,38)">
-        <circle cx="0" cy="-5" r="3" fill="#d4a090"/>
-        <circle cx="4" cy="-1" r="3" fill="#d4a090"/>
-        <circle cx="2" cy="4" r="3" fill="#d4a090"/>
-        <circle cx="-2" cy="4" r="3" fill="#d4a090"/>
-        <circle cx="-4" cy="-1" r="3" fill="#d4a090"/>
-        <circle cx="0" cy="0" r="2" fill="#c4a060"/>
-      </g>
-      <ellipse cx="35" cy="53" rx="5" ry="3" fill="#a09060" transform="rotate(-30 35 53)"/>
-      <ellipse cx="65" cy="60" rx="5" ry="3" fill="#a09060" transform="rotate(25 65 60)"/>
-    </svg>`,
-  },
+  // DIVIDERS (12)
+  {id:"line-thin",name:"Thin Line",category:"dividers",tags:["line"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="190" y2="5" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"line-double",name:"Double Line",category:"dividers",tags:["line","double"],svg:`<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="7" x2="190" y2="7" stroke="#c4a888" stroke-width="0.8"/><line x1="10" y1="13" x2="190" y2="13" stroke="#c4a888" stroke-width="0.8"/></svg>`},
+  {id:"line-dashed",name:"Dashed Line",category:"dividers",tags:["line","dashed"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="190" y2="5" stroke="#b8a070" stroke-width="1.2" stroke-dasharray="6,4"/></svg>`},
+  {id:"line-dotted",name:"Dotted Line",category:"dividers",tags:["line","dotted"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="190" y2="5" stroke="#c4a888" stroke-width="1.5" stroke-dasharray="2,6"/></svg>`},
+  {id:"line-dot-center",name:"Line + Dot",category:"dividers",tags:["line","dot"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="90" y2="5" stroke="#c4a888" stroke-width="0.8"/><circle cx="100" cy="5" r="2.5" fill="#8b6e50"/><line x1="110" y1="5" x2="190" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`},
+  {id:"line-3dots",name:"Line + 3 Dots",category:"dividers",tags:["line","ornament"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="80" y2="5" stroke="#c4a888" stroke-width="0.8"/><circle cx="90" cy="5" r="1.5" fill="#c4a888"/><circle cx="100" cy="5" r="2.5" fill="#8b6e50"/><circle cx="110" cy="5" r="1.5" fill="#c4a888"/><line x1="120" y1="5" x2="190" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`},
+  {id:"line-thick",name:"Thick Line",category:"dividers",tags:["line","thick"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="5" x2="170" y2="5" stroke="#8b6e50" stroke-width="2"/></svg>`},
+  {id:"line-short",name:"Short Line",category:"dividers",tags:["line","short"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="70" y1="5" x2="130" y2="5" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"vert-lines",name:"Vertical Lines",category:"dividers",tags:["vertical"],svg:`<svg viewBox="0 0 20 100" xmlns="http://www.w3.org/2000/svg"><line x1="7" y1="5" x2="7" y2="95" stroke="#6b5040" stroke-width="1.5"/><line x1="13" y1="5" x2="13" y2="95" stroke="#6b5040" stroke-width="1.5"/></svg>`},
+  {id:"line-wave",name:"Wave Line",category:"dividers",tags:["line","wave"],svg:`<svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 10 Q30 3 50 10 Q70 17 90 10 Q110 3 130 10 Q150 17 170 10 Q190 3 200 10" fill="none" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"line-diamond",name:"Diamond Line",category:"dividers",tags:["line","diamond"],svg:`<svg viewBox="0 0 200 14" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="7" x2="88" y2="7" stroke="#c4a888" stroke-width="0.8"/><polygon points="100,2 106,7 100,12 94,7" fill="#c4a888"/><line x1="112" y1="7" x2="190" y2="7" stroke="#c4a888" stroke-width="0.8"/></svg>`},
+  {id:"line-arrow",name:"Arrow Line",category:"dividers",tags:["line","arrow"],svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="30" y1="5" x2="170" y2="5" stroke="#c4a888" stroke-width="0.8"/><path d="M28 5 L35 2 L35 8Z" fill="#c4a888"/><path d="M172 5 L165 2 L165 8Z" fill="#c4a888"/></svg>`},
 
-  // === FRAMES ===
-  {
-    id: "frame-thin",
-    name: "Thin Frame",
-    category: "frames",
-    tags: ["frame", "border", "thin"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="8" width="84" height="84" rx="1" fill="none" stroke="#c4a888" stroke-width="1"/>
-    </svg>`,
-  },
-  {
-    id: "frame-double",
-    name: "Double Frame",
-    category: "frames",
-    tags: ["frame", "border", "double"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <rect x="5" y="5" width="90" height="90" rx="1" fill="none" stroke="#c4a888" stroke-width="0.8"/>
-      <rect x="10" y="10" width="80" height="80" rx="1" fill="none" stroke="#c4a888" stroke-width="0.5"/>
-    </svg>`,
-  },
-  {
-    id: "frame-arch",
-    name: "Arch Frame",
-    category: "frames",
-    tags: ["frame", "arch"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <path d="M25 90 L25 40 Q25 12 50 12 Q75 12 75 40 L75 90" fill="none" stroke="#c4a888" stroke-width="1.5"/>
-    </svg>`,
-  },
+  // SHAPES (12)
+  {id:"circle-cream",name:"Cream Circle",category:"shapes",tags:["circle"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#f0e4d4" opacity="0.5"/></svg>`},
+  {id:"circle-blush",name:"Blush Circle",category:"shapes",tags:["circle"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#f0d0c0" opacity="0.35"/></svg>`},
+  {id:"circle-gold",name:"Gold Circle",category:"shapes",tags:["circle"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="42" fill="#d4a878" opacity="0.25"/></svg>`},
+  {id:"circle-outline",name:"Circle Outline",category:"shapes",tags:["circle","outline"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="none" stroke="#c4a888" stroke-width="1.5"/></svg>`},
+  {id:"arch-1",name:"Arch",category:"shapes",tags:["arch"],svg:`<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg"><path d="M20 110 L20 45 Q20 10 50 10 Q80 10 80 45 L80 110Z" fill="#f0e4d4" opacity="0.35"/></svg>`},
+  {id:"arch-outline",name:"Arch Outline",category:"shapes",tags:["arch","outline"],svg:`<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg"><path d="M20 110 L20 45 Q20 10 50 10 Q80 10 80 45 L80 110" fill="none" stroke="#c4a888" stroke-width="1.5"/></svg>`},
+  {id:"crescent-1",name:"Crescent Moon",category:"shapes",tags:["moon"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M60 15 A35 35 0 1 0 60 85 A28 28 0 1 1 60 15Z" fill="#d4a878" opacity="0.4"/></svg>`},
+  {id:"diamond-1",name:"Diamond",category:"shapes",tags:["diamond"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 85,50 50,90 15,50" fill="#f0e4d4" opacity="0.4"/></svg>`},
+  {id:"diamond-outline",name:"Diamond Outline",category:"shapes",tags:["diamond","outline"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 85,50 50,90 15,50" fill="none" stroke="#c4a888" stroke-width="1.5"/></svg>`},
+  {id:"hexagon-1",name:"Hexagon",category:"shapes",tags:["hexagon"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 87,30 87,70 50,90 13,70 13,30" fill="#f0e4d4" opacity="0.35"/></svg>`},
+  {id:"oval-1",name:"Oval",category:"shapes",tags:["oval"],svg:`<svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg"><ellipse cx="60" cy="40" rx="55" ry="35" fill="#f0dcc8" opacity="0.35"/></svg>`},
+  {id:"star-5pt",name:"Star",category:"shapes",tags:["star"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,12 61,40 92,40 67,57 76,85 50,68 24,85 33,57 8,40 39,40" fill="#d4a878" opacity="0.5"/></svg>`},
 
-  // === DOTS & ACCENTS ===
-  {
-    id: "dots-row-pink",
-    name: "Pink Dots",
-    category: "dots",
-    tags: ["dots", "pink", "accent"],
-    svg: `<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="30" cy="10" r="3" fill="#d4a090" opacity="0.5"/>
-      <circle cx="42" cy="10" r="2" fill="#c49080" opacity="0.4"/>
-      <circle cx="52" cy="10" r="3.5" fill="#d4a090" opacity="0.6"/>
-      <circle cx="64" cy="10" r="2" fill="#c49080" opacity="0.4"/>
-      <circle cx="74" cy="10" r="3" fill="#d4a090" opacity="0.5"/>
-    </svg>`,
-  },
-  {
-    id: "dots-scattered",
-    name: "Scattered Dots",
-    category: "dots",
-    tags: ["dots", "scattered", "accent"],
-    svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="20" cy="30" r="2" fill="#d4a090" opacity="0.4"/>
-      <circle cx="45" cy="15" r="1.5" fill="#c4a060" opacity="0.3"/>
-      <circle cx="70" cy="25" r="2.5" fill="#d4a090" opacity="0.5"/>
-      <circle cx="30" cy="60" r="1.5" fill="#c49080" opacity="0.3"/>
-      <circle cx="55" cy="50" r="2" fill="#c4a060" opacity="0.4"/>
-      <circle cx="80" cy="55" r="1.5" fill="#d4a090" opacity="0.3"/>
-      <circle cx="25" cy="80" r="2" fill="#c4a060" opacity="0.4"/>
-      <circle cx="60" cy="78" r="2.5" fill="#d4a090" opacity="0.5"/>
-      <circle cx="75" cy="85" r="1.5" fill="#c49080" opacity="0.3"/>
-    </svg>`,
-  },
-  {
-    id: "single-dot",
-    name: "Single Dot",
-    category: "dots",
-    tags: ["dot", "accent", "single"],
-    svg: `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="10" cy="10" r="4" fill="#8b6e50"/>
-    </svg>`,
-  },
+  // FRAMES (8)
+  {id:"frame-thin",name:"Thin Frame",category:"frames",tags:["frame"],svg:`<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="90" height="130" rx="1" fill="none" stroke="#c4a888" stroke-width="0.8"/></svg>`},
+  {id:"frame-double",name:"Double Frame",category:"frames",tags:["frame","double"],svg:`<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="94" height="134" rx="1" fill="none" stroke="#c4a888" stroke-width="0.6"/><rect x="7" y="7" width="86" height="126" rx="1" fill="none" stroke="#c4a888" stroke-width="0.4"/></svg>`},
+  {id:"frame-arch",name:"Arch Frame",category:"frames",tags:["frame","arch"],svg:`<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><path d="M15 130 L15 45 Q15 8 50 8 Q85 8 85 45 L85 130" fill="none" stroke="#c4a888" stroke-width="1.2"/></svg>`},
+  {id:"frame-corner-tl",name:"Corner TL",category:"frames",tags:["frame","corner"],svg:`<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M5 45 L5 5 L45 5" fill="none" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"frame-corner-tr",name:"Corner TR",category:"frames",tags:["frame","corner"],svg:`<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M5 5 L45 5 L45 45" fill="none" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"frame-corner-bl",name:"Corner BL",category:"frames",tags:["frame","corner"],svg:`<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M5 5 L5 45 L45 45" fill="none" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"frame-corner-br",name:"Corner BR",category:"frames",tags:["frame","corner"],svg:`<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><path d="M45 5 L45 45 L5 45" fill="none" stroke="#c4a888" stroke-width="1"/></svg>`},
+  {id:"frame-ornate",name:"Ornate Frame",category:"frames",tags:["frame","ornate"],svg:`<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="90" height="130" rx="2" fill="none" stroke="#c4a888" stroke-width="1"/><circle cx="5" cy="5" r="2.5" fill="#c4a888"/><circle cx="95" cy="5" r="2.5" fill="#c4a888"/><circle cx="5" cy="135" r="2.5" fill="#c4a888"/><circle cx="95" cy="135" r="2.5" fill="#c4a888"/></svg>`},
+
+  // DOTS (5)
+  {id:"dots-row-pink",name:"Pink Dots",category:"dots",tags:["dots","row"],svg:`<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="10" r="3" fill="#d4a090" opacity="0.5"/><circle cx="42" cy="10" r="2" fill="#c49080" opacity="0.4"/><circle cx="52" cy="10" r="3.5" fill="#d4a090" opacity="0.6"/><circle cx="64" cy="10" r="2" fill="#c49080" opacity="0.4"/><circle cx="74" cy="10" r="3" fill="#d4a090" opacity="0.5"/></svg>`},
+  {id:"dots-row-brown",name:"Brown Dots",category:"dots",tags:["dots","row"],svg:`<svg viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><circle cx="25" cy="10" r="2.5" fill="#8b6e50" opacity="0.5"/><circle cx="40" cy="10" r="2" fill="#a08060" opacity="0.4"/><circle cx="50" cy="10" r="3" fill="#8b6e50" opacity="0.6"/><circle cx="60" cy="10" r="2" fill="#a08060" opacity="0.4"/><circle cx="75" cy="10" r="2.5" fill="#8b6e50" opacity="0.5"/></svg>`},
+  {id:"dots-scattered",name:"Scattered Dots",category:"dots",tags:["dots","scattered"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="30" r="2" fill="#d4a090" opacity="0.4"/><circle cx="45" cy="15" r="1.5" fill="#c4a060" opacity="0.3"/><circle cx="70" cy="25" r="2.5" fill="#d4a090" opacity="0.5"/><circle cx="55" cy="50" r="2" fill="#c4a060" opacity="0.4"/><circle cx="80" cy="55" r="1.5" fill="#d4a090" opacity="0.3"/><circle cx="25" cy="80" r="2" fill="#c4a060" opacity="0.4"/><circle cx="60" cy="78" r="2.5" fill="#d4a090" opacity="0.5"/></svg>`},
+  {id:"dot-single",name:"Single Dot",category:"dots",tags:["dot"],svg:`<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="5" fill="#8b6e50"/></svg>`},
+  {id:"dot-ring",name:"Dot Ring",category:"dots",tags:["dot","ring"],svg:`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" fill="none" stroke="#c4a888" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="#c4a888"/></svg>`},
+
+  // STARS (6)
+  {id:"star-4pt",name:"4-Point Star",category:"stars",tags:["star","sparkle"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 10 L55 42 L90 50 L55 58 L50 90 L45 58 L10 50 L45 42Z" fill="#d4a878" opacity="0.6"/></svg>`},
+  {id:"star-outline",name:"Star Outline",category:"stars",tags:["star","outline"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,12 61,40 92,40 67,57 76,85 50,68 24,85 33,57 8,40 39,40" fill="none" stroke="#c4a888" stroke-width="1.5"/></svg>`},
+  {id:"sparkle-small",name:"Small Sparkle",category:"stars",tags:["sparkle"],svg:`<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><path d="M15 3 L16.5 12 L25 15 L16.5 18 L15 27 L13.5 18 L5 15 L13.5 12Z" fill="#d4a878" opacity="0.5"/></svg>`},
+  {id:"sparkle-3",name:"Triple Sparkle",category:"stars",tags:["sparkle","triple"],svg:`<svg viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg"><path d="M25 5 L26 17 L38 20 L26 23 L25 35 L24 23 L12 20 L24 17Z" fill="#d4a878" opacity="0.5"/><path d="M50 8 L51 17 L60 19 L51 21 L50 30 L49 21 L40 19 L49 17Z" fill="#c4a888" opacity="0.4"/><path d="M75 5 L76 17 L88 20 L76 23 L75 35 L74 23 L62 20 L74 17Z" fill="#d4a878" opacity="0.5"/></svg>`},
+  {id:"sun-1",name:"Sun",category:"stars",tags:["sun"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="15" fill="#d4a878" opacity="0.5"/><g stroke="#d4a878" stroke-width="1.5" opacity="0.4"><line x1="50" y1="10" x2="50" y2="28"/><line x1="50" y1="72" x2="50" y2="90"/><line x1="10" y1="50" x2="28" y2="50"/><line x1="72" y1="50" x2="90" y2="50"/><line x1="22" y1="22" x2="35" y2="35"/><line x1="65" y1="65" x2="78" y2="78"/><line x1="78" y1="22" x2="65" y2="35"/><line x1="35" y1="65" x2="22" y2="78"/></g></svg>`},
+  {id:"moon-stars",name:"Moon & Stars",category:"stars",tags:["moon","stars"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M55 18 A28 28 0 1 0 55 82 A22 22 0 1 1 55 18Z" fill="#d4a878" opacity="0.35"/><path d="M72 22 L73 27 L78 28 L73 29 L72 34 L71 29 L66 28 L71 27Z" fill="#d4a878" opacity="0.4"/><path d="M80 40 L81 43 L84 44 L81 45 L80 48 L79 45 L76 44 L79 43Z" fill="#c4a888" opacity="0.35"/></svg>`},
+
+  // BOTANICAL (10)
+  {id:"eucalyptus-1",name:"Eucalyptus",category:"botanical",tags:["eucalyptus"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><line x1="50" y1="5" x2="50" y2="95" stroke="#8a7a5a" stroke-width="1.5"/><ellipse cx="42" cy="18" rx="7" ry="4" fill="#b8a878" transform="rotate(-20 42 18)"/><ellipse cx="58" cy="28" rx="7" ry="4" fill="#a09060" transform="rotate(20 58 28)"/><ellipse cx="42" cy="38" rx="7" ry="4" fill="#b8a878" transform="rotate(-20 42 38)"/><ellipse cx="58" cy="48" rx="8" ry="4.5" fill="#a09060" transform="rotate(20 58 48)"/><ellipse cx="42" cy="58" rx="8" ry="4.5" fill="#b8a878" transform="rotate(-20 42 58)"/><ellipse cx="58" cy="68" rx="9" ry="5" fill="#a09060" transform="rotate(20 58 68)"/><ellipse cx="42" cy="78" rx="9" ry="5" fill="#b8a878" transform="rotate(-20 42 78)"/></svg>`},
+  {id:"olive-branch",name:"Olive Branch",category:"botanical",tags:["olive","branch"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M20 85 Q45 55 80 15" fill="none" stroke="#8a7a5a" stroke-width="1.5"/><ellipse cx="35" cy="68" rx="5" ry="3" fill="#a09060" transform="rotate(-50 35 68)"/><ellipse cx="28" cy="75" rx="5" ry="3" fill="#b8a878" transform="rotate(-40 28 75)"/><ellipse cx="45" cy="58" rx="5" ry="3" fill="#a09060" transform="rotate(-50 45 58)"/><ellipse cx="55" cy="48" rx="5" ry="3" fill="#b8a878" transform="rotate(-50 55 48)"/><ellipse cx="63" cy="38" rx="5" ry="3" fill="#a09060" transform="rotate(-45 63 38)"/><ellipse cx="70" cy="28" rx="4" ry="2.5" fill="#b8a878" transform="rotate(-50 70 28)"/></svg>`},
+  {id:"fern-1",name:"Fern",category:"botanical",tags:["fern"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 95 Q48 50 50 10" fill="none" stroke="#7a8a5a" stroke-width="1.5"/><path d="M50 20 Q35 15 30 20 M50 20 Q65 15 70 20" fill="none" stroke="#8a9a6a" stroke-width="1"/><path d="M50 30 Q32 24 25 30 M50 30 Q68 24 75 30" fill="none" stroke="#8a9a6a" stroke-width="1"/><path d="M50 40 Q30 33 22 40 M50 40 Q70 33 78 40" fill="none" stroke="#8a9a6a" stroke-width="1"/><path d="M50 50 Q32 44 25 50 M50 50 Q68 44 75 50" fill="none" stroke="#8a9a6a" stroke-width="1"/><path d="M50 60 Q35 54 28 60 M50 60 Q65 54 72 60" fill="none" stroke="#8a9a6a" stroke-width="1"/></svg>`},
+  {id:"wreath-1",name:"Mini Wreath",category:"botanical",tags:["wreath"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="28" fill="none" stroke="#8a7a5a" stroke-width="1"/><ellipse cx="24" cy="38" rx="5" ry="3" fill="#a09060" transform="rotate(-60 24 38)"/><ellipse cx="22" cy="52" rx="5" ry="3" fill="#b8a878" transform="rotate(-80 22 52)"/><ellipse cx="26" cy="66" rx="5" ry="3" fill="#a09060" transform="rotate(60 26 66)"/><ellipse cx="38" cy="76" rx="5" ry="3" fill="#b8a878" transform="rotate(30 38 76)"/><ellipse cx="62" cy="76" rx="5" ry="3" fill="#b8a878" transform="rotate(-30 62 76)"/><ellipse cx="74" cy="66" rx="5" ry="3" fill="#a09060" transform="rotate(-60 74 66)"/><ellipse cx="78" cy="52" rx="5" ry="3" fill="#b8a878" transform="rotate(80 78 52)"/><ellipse cx="76" cy="38" rx="5" ry="3" fill="#a09060" transform="rotate(60 76 38)"/><ellipse cx="62" cy="24" rx="5" ry="3" fill="#b8a878" transform="rotate(30 62 24)"/><ellipse cx="38" cy="24" rx="5" ry="3" fill="#b8a878" transform="rotate(-30 38 24)"/></svg>`},
+  {id:"mushroom-1",name:"Mushroom",category:"botanical",tags:["mushroom"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="42" y="58" width="16" height="32" rx="4" fill="#f0e0d0"/><path d="M25 60 Q25 28 50 22 Q75 28 75 60Z" fill="#c49080"/><circle cx="40" cy="40" r="4" fill="#f0dcc8" opacity="0.6"/><circle cx="55" cy="34" r="3" fill="#f0dcc8" opacity="0.6"/><circle cx="62" cy="48" r="3.5" fill="#f0dcc8" opacity="0.6"/></svg>`},
+  {id:"butterfly-1",name:"Butterfly",category:"botanical",tags:["butterfly"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 50 Q30 25 15 35 Q5 45 25 55 Q35 60 50 50Z" fill="#e8c0b0" opacity="0.6"/><path d="M50 50 Q70 25 85 35 Q95 45 75 55 Q65 60 50 50Z" fill="#e8c0b0" opacity="0.6"/><path d="M50 50 Q35 60 25 70 Q20 78 35 75 Q45 70 50 55Z" fill="#d4a090" opacity="0.5"/><path d="M50 50 Q65 60 75 70 Q80 78 65 75 Q55 70 50 55Z" fill="#d4a090" opacity="0.5"/><line x1="50" y1="35" x2="50" y2="65" stroke="#8a7a5a" stroke-width="1.5"/></svg>`},
+  {id:"cloud-1",name:"Cloud",category:"botanical",tags:["cloud"],svg:`<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><path d="M20 45 Q8 45 8 35 Q8 25 18 25 Q18 16 30 14 Q42 8 50 18 Q55 12 65 15 Q78 18 76 30 Q86 32 86 38 Q86 45 76 45Z" fill="#f0e4d4" opacity="0.5"/></svg>`},
+  {id:"rainbow-1",name:"Rainbow",category:"botanical",tags:["rainbow"],svg:`<svg viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg"><path d="M10 55 Q10 15 50 15 Q90 15 90 55" fill="none" stroke="#d4a090" stroke-width="3.5" opacity="0.5"/><path d="M18 55 Q18 23 50 23 Q82 23 82 55" fill="none" stroke="#d4a878" stroke-width="3.5" opacity="0.4"/><path d="M26 55 Q26 31 50 31 Q74 31 74 55" fill="none" stroke="#c4a888" stroke-width="3.5" opacity="0.35"/></svg>`},
+  {id:"feather-1",name:"Feather",category:"botanical",tags:["feather"],svg:`<svg viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg"><path d="M30 5 Q45 30 40 55 Q38 70 30 95" fill="none" stroke="#8a7a5a" stroke-width="1"/><path d="M30 15 Q42 20 40 35 Q38 45 30 55" fill="#d4a878" opacity="0.3"/><path d="M30 15 Q18 20 20 35 Q22 45 30 55" fill="#c4a888" opacity="0.3"/></svg>`},
+  {id:"ribbon-1",name:"Ribbon Bow",category:"botanical",tags:["ribbon","bow"],svg:`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 45 Q30 25 20 35 Q10 45 30 50 Q10 55 20 65 Q30 75 50 55Z" fill="#d4a090" opacity="0.6"/><path d="M50 45 Q70 25 80 35 Q90 45 70 50 Q90 55 80 65 Q70 75 50 55Z" fill="#d4a090" opacity="0.6"/><circle cx="50" cy="50" r="5" fill="#c49080"/><path d="M45 55 L40 80" stroke="#d4a090" stroke-width="2.5" stroke-linecap="round"/><path d="M55 55 L60 80" stroke="#d4a090" stroke-width="2.5" stroke-linecap="round"/></svg>`},
 ];
 
 export const FONTS = [
@@ -518,12 +168,12 @@ export const FONTS = [
 ];
 
 export const COLOR_PALETTES = {
-  earthy: ["#8b5e3c", "#6b4028", "#a07050", "#c49a6c", "#d4a878", "#dbb896", "#f0dcc8", "#f5ece0"],
-  blush: ["#d4a090", "#c89080", "#e8b4a0", "#e8c0b0", "#f0d0c0", "#e0a090", "#c49080", "#b87060"],
-  olive: ["#a09060", "#b8a878", "#c0a868", "#8a7a5a", "#6b6040", "#d0c098", "#e0d8c0", "#504830"],
-  cream: ["#f5ece0", "#f0e4d4", "#e8dcc8", "#fff8f0", "#fdf6f0", "#f0dcc8", "#e8d4c0", "#ffffff"],
-  brown: ["#4a3020", "#5a3e28", "#6b5040", "#8b6e50", "#a08060", "#b89878", "#c4a888", "#d4b898"],
-  neutral: ["#ffffff", "#f5f5f0", "#e8e0d8", "#d0c8c0", "#a09890", "#807068", "#605048", "#3a2820"],
+  earthy: ["#8b5e3c","#6b4028","#a07050","#c49a6c","#d4a878","#dbb896","#f0dcc8","#f5ece0"],
+  blush: ["#d4a090","#c89080","#e8b4a0","#e8c0b0","#f0d0c0","#e0a090","#c49080","#b87060"],
+  olive: ["#a09060","#b8a878","#c0a868","#8a7a5a","#6b6040","#d0c098","#e0d8c0","#504830"],
+  cream: ["#f5ece0","#f0e4d4","#e8dcc8","#fff8f0","#fdf6f0","#f0dcc8","#e8d4c0","#ffffff"],
+  brown: ["#4a3020","#5a3e28","#6b5040","#8b6e50","#a08060","#b89878","#c4a888","#d4b898"],
+  neutral: ["#ffffff","#f5f5f0","#e8e0d8","#d0c8c0","#a09890","#807068","#605048","#3a2820"],
 };
 
 export const CANVAS_PRESETS = [
@@ -536,198 +186,17 @@ export const CANVAS_PRESETS = [
   { name: "Desktop Wallpaper", width: 2560, height: 1440 },
 ];
 
-// === TEXT PRESETS ===
 export interface TextPreset {
-  id: string;
-  name: string;
-  fontFamily: string;
-  fontSize: number;
-  fill: string;
-  letterSpacing?: number;
-  fontWeight?: string;
-  fontStyle?: string;
-  textAlign?: string;
-  text: string;
+  id: string; name: string; fontFamily: string; fontSize: number; fill: string;
+  letterSpacing?: number; fontWeight?: string; fontStyle?: string; textAlign?: string; text: string;
 }
 
 export const TEXT_PRESETS: TextPreset[] = [
-  {
-    id: "heading-large",
-    name: "Large Heading",
-    fontFamily: "'Playfair Display', serif",
-    fontSize: 72,
-    fill: "#4a3728",
-    fontWeight: "600",
-    textAlign: "center",
-    text: "Your Title Here",
-  },
-  {
-    id: "heading-accent",
-    name: "Accent Heading",
-    fontFamily: "'Playfair Display', serif",
-    fontSize: 72,
-    fill: "#c49a6c",
-    fontWeight: "600",
-    fontStyle: "italic",
-    textAlign: "center",
-    text: "Accent Word",
-  },
-  {
-    id: "subtitle-spaced",
-    name: "Spaced Subtitle",
-    fontFamily: "'Montserrat', sans-serif",
-    fontSize: 18,
-    fill: "#8b6e50",
-    letterSpacing: 600,
-    fontWeight: "400",
-    textAlign: "center",
-    text: "A L W A Y S   R E M E M B E R",
-  },
-  {
-    id: "body-italic",
-    name: "Italic Body",
-    fontFamily: "'Cormorant Garamond', serif",
-    fontSize: 24,
-    fill: "#6b5040",
-    fontStyle: "italic",
-    textAlign: "center",
-    text: "you deserve your own love first",
-  },
-  {
-    id: "caption-spaced",
-    name: "Spaced Caption",
-    fontFamily: "'Montserrat', sans-serif",
-    fontSize: 14,
-    fill: "#c4a888",
-    letterSpacing: 500,
-    fontWeight: "300",
-    textAlign: "center",
-    text: "s e l f   l o v e   c o l l e c t i o n",
-  },
-  {
-    id: "script-large",
-    name: "Script Text",
-    fontFamily: "'Dancing Script', cursive",
-    fontSize: 48,
-    fill: "#8b5e3c",
-    textAlign: "center",
-    text: "Beautiful",
-  },
-  {
-    id: "quote-elegant",
-    name: "Elegant Quote",
-    fontFamily: "'Cormorant Garamond', serif",
-    fontSize: 28,
-    fill: "#5a3e28",
-    fontStyle: "italic",
-    textAlign: "center",
-    text: "your story is worth telling",
-  },
-];
-
-// === TEMPLATES ===
-export interface Template {
-  id: string;
-  name: string;
-  thumbnail: string; // description for now
-  backgroundColor: string;
-  elements: Array<{
-    type: "svg" | "text";
-    elementId?: string;
-    svg?: string;
-    text?: string;
-    x: number;
-    y: number;
-    scale?: number;
-    fontFamily?: string;
-    fontSize?: number;
-    fill?: string;
-    fontWeight?: string;
-    fontStyle?: string;
-    textAlign?: string;
-    letterSpacing?: number;
-  }>;
-}
-
-export const TEMPLATES: Template[] = [
-  {
-    id: "self-love-poster",
-    name: "Self Love Poster",
-    thumbnail: "Earthy tones with puppy faces and leaf decorations",
-    backgroundColor: "#f5ece0",
-    elements: [
-      // Big cream circle background
-      { type: "svg", svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#f0e4d4" opacity="0.5"/></svg>`, x: 740, y: 400, scale: 6 },
-      // Double border frame
-      { type: "svg", svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="94" height="134" rx="1" fill="none" stroke="#c4a888" stroke-width="0.6"/></svg>`, x: 100, y: 100, scale: 22 },
-      // Top left leaf cluster
-      { type: "svg", elementId: "leaf-cluster-brown", x: 140, y: 150, scale: 1.8 },
-      // Top right leaf cluster
-      { type: "svg", elementId: "leaf-cluster-olive", x: 2050, y: 150, scale: 1.8 },
-      // Bottom left leaf cluster
-      { type: "svg", elementId: "leaf-cluster-mixed", x: 140, y: 2900, scale: 1.5 },
-      // Bottom right leaf cluster
-      { type: "svg", elementId: "leaf-cluster-olive", x: 2050, y: 2900, scale: 1.5 },
-      // Puppy faces
-      { type: "svg", elementId: "puppy-face-1", x: 1100, y: 500, scale: 0.9 },
-      { type: "svg", elementId: "puppy-face-2", x: 500, y: 700, scale: 0.8 },
-      { type: "svg", elementId: "puppy-face-3", x: 1700, y: 700, scale: 0.8 },
-      // Vertical accent lines
-      { type: "svg", svg: `<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="0" x2="3" y2="100" stroke="#5a4030" stroke-width="1.2"/><line x1="7" y1="0" x2="7" y2="100" stroke="#5a4030" stroke-width="1.2"/></svg>`, x: 220, y: 200, scale: 2.5 },
-      { type: "svg", svg: `<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="0" x2="3" y2="100" stroke="#5a4030" stroke-width="1.2"/><line x1="7" y1="0" x2="7" y2="100" stroke="#5a4030" stroke-width="1.2"/></svg>`, x: 2180, y: 200, scale: 2.5 },
-      // "ALWAYS REMEMBER" text
-      { type: "text", text: "A L W A Y S   R E M E M B E R", x: 600, y: 1050, fontFamily: "'Montserrat', sans-serif", fontSize: 20, fill: "#8b6e50", fontWeight: "400", textAlign: "center" },
-      // Main heading
-      { type: "text", text: "Choose\nYourself,\nEvery Day.", x: 500, y: 1150, fontFamily: "'Playfair Display', serif", fontSize: 90, fill: "#4a3728", fontWeight: "600", textAlign: "center" },
-      // Divider dot
-      { type: "svg", svg: `<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3" fill="#8b6e50"/></svg>`, x: 1220, y: 1650, scale: 0.8 },
-      // Subtitle
-      { type: "text", text: "you deserve your own love first", x: 550, y: 1750, fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fill: "#6b5040", fontStyle: "italic", textAlign: "center" },
-      // Middle row of puppies
-      { type: "svg", elementId: "puppy-face-1", x: 500, y: 2000, scale: 1.0 },
-      { type: "svg", elementId: "puppy-face-2", x: 1100, y: 2000, scale: 1.1 },
-      { type: "svg", elementId: "puppy-face-3", x: 1700, y: 2000, scale: 1.0 },
-      // Dashed line
-      { type: "svg", svg: `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="5" x2="200" y2="5" stroke="#b8a070" stroke-width="1.2" stroke-dasharray="6,4"/></svg>`, x: 300, y: 2350, scale: 8 },
-      // "your story is worth telling"
-      { type: "text", text: "y o u r   s t o r y   i s   w o r t h   t e l l i n g", x: 450, y: 2500, fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fill: "#6b5040", fontStyle: "italic", textAlign: "center" },
-      // Bottom dots
-      { type: "svg", elementId: "dots-row-pink", x: 800, y: 2700, scale: 2.5 },
-      // "self love collection"
-      { type: "text", text: "s e l f   l o v e   c o l l e c t i o n", x: 650, y: 2900, fontFamily: "'Montserrat', sans-serif", fontSize: 16, fill: "#c4a888", fontWeight: "300", textAlign: "center" },
-    ],
-  },
-  {
-    id: "minimal-quote",
-    name: "Minimal Quote",
-    thumbnail: "Clean minimal design with centered quote",
-    backgroundColor: "#fdf6f0",
-    elements: [
-      { type: "svg", svg: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="#f0e4d4" opacity="0.3"/></svg>`, x: 740, y: 1100, scale: 10 },
-      { type: "svg", elementId: "eucalyptus-stem", x: 200, y: 200, scale: 2.0 },
-      { type: "svg", elementId: "eucalyptus-stem", x: 2100, y: 200, scale: 2.0 },
-      { type: "svg", svg: `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="190" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`, x: 600, y: 1300, scale: 6 },
-      { type: "text", text: "Be Still\n& Know", x: 600, y: 1400, fontFamily: "'Playfair Display', serif", fontSize: 100, fill: "#4a3728", fontWeight: "600", textAlign: "center" },
-      { type: "svg", svg: `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="190" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`, x: 600, y: 1900, scale: 6 },
-      { type: "text", text: "that you are enough", x: 700, y: 2000, fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fill: "#8b6e50", fontStyle: "italic", textAlign: "center" },
-    ],
-  },
-  {
-    id: "boho-floral",
-    name: "Boho Floral",
-    thumbnail: "Bohemian style with earth-toned florals",
-    backgroundColor: "#f5ece0",
-    elements: [
-      { type: "svg", svg: `<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><path d="M20 130 L20 40 Q20 10 50 10 Q80 10 80 40 L80 130" fill="none" stroke="#c4a888" stroke-width="0.8"/></svg>`, x: 500, y: 400, scale: 15 },
-      { type: "svg", elementId: "leaf-cluster-mixed", x: 400, y: 500, scale: 2.0 },
-      { type: "svg", elementId: "leaf-cluster-brown", x: 1700, y: 500, scale: 2.0 },
-      { type: "svg", elementId: "cherry-blossom-1", x: 700, y: 600, scale: 1.2 },
-      { type: "svg", elementId: "cherry-blossom-1", x: 1500, y: 650, scale: 1.0 },
-      { type: "text", text: "Bloom\nWhere You\nAre Planted", x: 600, y: 1200, fontFamily: "'Playfair Display', serif", fontSize: 80, fill: "#4a3728", fontWeight: "600", textAlign: "center" },
-      { type: "svg", elementId: "wildflower-boho", x: 500, y: 2200, scale: 1.5 },
-      { type: "svg", elementId: "wildflower-boho", x: 1100, y: 2100, scale: 1.8 },
-      { type: "svg", elementId: "wildflower-boho", x: 1700, y: 2200, scale: 1.5 },
-      { type: "text", text: "g r o w   w i t h   g r a c e", x: 700, y: 2800, fontFamily: "'Montserrat', sans-serif", fontSize: 16, fill: "#a09060", fontWeight: "300", textAlign: "center" },
-    ],
-  },
+  { id:"heading-large", name:"Large Heading", fontFamily:"'Playfair Display', serif", fontSize:72, fill:"#4a3728", fontWeight:"600", textAlign:"center", text:"Your Title Here" },
+  { id:"heading-accent", name:"Accent Heading", fontFamily:"'Playfair Display', serif", fontSize:72, fill:"#c49a6c", fontWeight:"600", fontStyle:"italic", textAlign:"center", text:"Accent Word" },
+  { id:"subtitle-spaced", name:"Spaced Subtitle", fontFamily:"'Montserrat', sans-serif", fontSize:18, fill:"#8b6e50", letterSpacing:600, fontWeight:"400", textAlign:"center", text:"A L W A Y S   R E M E M B E R" },
+  { id:"body-italic", name:"Italic Body", fontFamily:"'Cormorant Garamond', serif", fontSize:24, fill:"#6b5040", fontStyle:"italic", textAlign:"center", text:"you deserve your own love first" },
+  { id:"caption-spaced", name:"Spaced Caption", fontFamily:"'Montserrat', sans-serif", fontSize:14, fill:"#c4a888", letterSpacing:500, fontWeight:"300", textAlign:"center", text:"s e l f   l o v e   c o l l e c t i o n" },
+  { id:"script-large", name:"Script Text", fontFamily:"'Dancing Script', cursive", fontSize:48, fill:"#8b5e3c", textAlign:"center", text:"Beautiful" },
+  { id:"quote-elegant", name:"Elegant Quote", fontFamily:"'Cormorant Garamond', serif", fontSize:28, fill:"#5a3e28", fontStyle:"italic", textAlign:"center", text:"your story is worth telling" },
 ];
