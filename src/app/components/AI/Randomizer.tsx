@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ELEMENTS, FONTS } from "@/app/lib/elements";
+import { ELEMENTS } from "@/app/lib/elements";
 import { CanvasHandle } from "../Editor/Canvas";
 
 interface RandomizerProps {
@@ -16,12 +16,9 @@ const QUOTES = [
   "She Believed\nShe Could,\nSo She Did",
   "You Are\nEnough,\nAlways.",
   "Grow Through\nWhat You\nGo Through",
-  "Let Your\nHeart Be\nYour Guide",
   "Dream\nWithout Fear",
-  "Be The\nEnergy You\nWant To Attract",
-  "Stars Can't\nShine Without\nDarkness",
+  "Be The Energy\nYou Want\nTo Attract",
   "Your Story\nIs Worth\nTelling",
-  "Inhale\nConfidence,\nExhale Doubt",
 ];
 
 const SUBTITLES = [
@@ -30,16 +27,13 @@ const SUBTITLES = [
   "K E E P   G O I N G",
   "B E L I E V E",
   "Y O U   M A T T E R",
-  "S T A Y   S O F T",
 ];
 
 const TAGLINES = [
   "you deserve your own love first",
   "be gentle with yourself today",
-  "your light is needed in this world",
   "every day is a fresh beginning",
   "let kindness guide your way",
-  "breathe in peace, breathe out worry",
 ];
 
 const CAPTIONS = [
@@ -47,169 +41,175 @@ const CAPTIONS = [
   "d a i l y   a f f i r m a t i o n s",
   "g r o w   w i t h   g r a c e",
   "w a l l   a r t   s e r i e s",
-  "i n s p i r e d   l i v i n g",
 ];
 
-const BG_COLORS = ["#f5ece0", "#fdf6f0", "#f0e4d4", "#fff8f0", "#f0dcc8"];
-
-function pick<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
-function pickN<T>(arr: T[], n: number): T[] {
-  const shuffled = [...arr].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, n);
-}
+const BG_COLORS = ["#f5ece0", "#fdf6f0", "#f0e4d4", "#fff8f0"];
+function pick<T>(a: T[]): T { return a[Math.floor(Math.random() * a.length)]; }
+function pickN<T>(a: T[], n: number): T[] { return [...a].sort(() => Math.random() - 0.5).slice(0, n); }
+function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
 export default function Randomizer({ canvasRef, onBackgroundChange }: RandomizerProps) {
   const [isRandomizing, setIsRandomizing] = useState(false);
 
   const randomize = async () => {
     setIsRandomizing(true);
-    const canvas = canvasRef.current;
-    if (!canvas) { setIsRandomizing(false); return; }
+    const c = canvasRef.current;
+    if (!c) { setIsRandomizing(false); return; }
 
-    canvas.clearCanvas();
+    c.clearCanvas();
+    const { width: W, height: H } = c.getSize();
 
-    // Background
+    // Background color
     const bg = pick(BG_COLORS);
-    canvas.setBackgroundColor(bg);
+    c.setBackgroundColor(bg);
     onBackgroundChange(bg);
 
-    // Layout: structured poster like the example
-    // 1. Large background circle in upper-center
-    canvas.addSvgElement(`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="#f0e4d4" opacity="0.45"/></svg>`);
+    await delay(50);
 
-    // 2. Frame border
-    canvas.addSvgElement(`<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="94" height="134" rx="1" fill="none" stroke="#c4a888" stroke-width="0.6"/></svg>`);
-
-    // 3. Corner leaf clusters (top-left + top-right)
-    const clusters = ELEMENTS.filter(e => e.tags.includes("cluster"));
-    if (clusters.length >= 2) {
-      const picks = pickN(clusters, 2);
-      canvas.addSvgElement(picks[0].svg);
-      await delay(80);
-      canvas.addSvgElement(picks[1].svg);
-    }
-
+    // 1. Large background circle - upper center area
+    c.addSvgElement(
+      `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#f0e4d4" opacity="0.45"/></svg>`,
+      { left: W * 0.2, top: H * 0.05, scaleW: W * 0.6 }
+    );
     await delay(80);
 
-    // 4. Cute animal faces (2-3)
+    // 2. Thin border frame
+    c.addSvgElement(
+      `<svg viewBox="0 0 100 141" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="96" height="137" rx="1" fill="none" stroke="#c4a888" stroke-width="0.5"/></svg>`,
+      { left: W * 0.05, top: H * 0.03, scaleW: W * 0.9 }
+    );
+    await delay(80);
+
+    // 3. Corner leaf clusters
+    const clusters = ELEMENTS.filter(e => e.tags.includes("cluster"));
+    const clusterPicks = pickN(clusters, 2);
+    c.addSvgElement(clusterPicks[0].svg, { left: W * 0.06, top: H * 0.04, scaleW: W * 0.14 });
+    await delay(60);
+    c.addSvgElement(clusterPicks[1].svg, { left: W * 0.78, top: H * 0.04, scaleW: W * 0.14 });
+    await delay(60);
+
+    // 4. Side leaf clusters at bottom
+    const moreClusters = pickN(clusters, 2);
+    c.addSvgElement(moreClusters[0].svg, { left: W * 0.82, top: H * 0.35, scaleW: W * 0.1 });
+    await delay(60);
+    c.addSvgElement(moreClusters[1].svg, { left: W * 0.04, top: H * 0.38, scaleW: W * 0.1 });
+    await delay(60);
+
+    // 5. Vertical accent lines (left and right of frame)
+    const vertLine = `<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="0" x2="3" y2="100" stroke="#5a4030" stroke-width="1.5"/><line x1="7" y1="0" x2="7" y2="100" stroke="#5a4030" stroke-width="1.5"/></svg>`;
+    c.addSvgElement(vertLine, { left: W * 0.09, top: H * 0.06, scaleW: W * 0.012 });
+    await delay(40);
+    c.addSvgElement(vertLine, { left: W * 0.89, top: H * 0.06, scaleW: W * 0.012 });
+    await delay(60);
+
+    // 6. Cute animal faces - top row (inside the circle area)
     const cuteAnimals = ELEMENTS.filter(e => e.category === "cute");
-    const animalPicks = pickN(cuteAnimals, 2 + Math.floor(Math.random() * 2));
-    for (const animal of animalPicks) {
-      canvas.addSvgElement(animal.svg);
-      await delay(60);
-    }
-
-    // 5. Vertical accent lines
-    canvas.addSvgElement(`<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="0" x2="3" y2="100" stroke="#5a4030" stroke-width="1.2"/><line x1="7" y1="0" x2="7" y2="100" stroke="#5a4030" stroke-width="1.2"/></svg>`);
-
+    const topAnimals = pickN(cuteAnimals, 3);
+    c.addSvgElement(topAnimals[0].svg, { left: W * 0.42, top: H * 0.08, scaleW: W * 0.08 });
+    await delay(50);
+    c.addSvgElement(topAnimals[1].svg, { left: W * 0.2, top: H * 0.15, scaleW: W * 0.07 });
+    await delay(50);
+    c.addSvgElement(topAnimals[2].svg, { left: W * 0.68, top: H * 0.15, scaleW: W * 0.07 });
     await delay(60);
 
-    // 6. Divider lines
-    const divider = pick(ELEMENTS.filter(e => e.category === "dividers" && !e.tags.includes("vertical")));
-    if (divider) canvas.addSvgElement(divider.svg);
-
+    // 7. Horizontal divider line
+    c.addSvgElement(
+      `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`,
+      { left: W * 0.15, top: H * 0.28, scaleW: W * 0.7 }
+    );
     await delay(60);
 
-    // 7. Text hierarchy - subtitle
-    const subtitle = pick(SUBTITLES);
-    canvas.addText(subtitle, {
-      fontFamily: "'Montserrat', sans-serif",
-      fontSize: 18,
-      fill: "#8b6e50",
-      fontWeight: "400",
-      textAlign: "center",
+    // 8. Spaced subtitle text
+    c.addText(pick(SUBTITLES), {
+      left: W / 2, top: H * 0.31,
+      fontFamily: "'Montserrat', sans-serif", fontSize: 18,
+      fill: "#8b6e50", fontWeight: "400", textAlign: "center",
     });
-
     await delay(60);
 
-    // 8. Main quote heading
+    // 9. MAIN HEADING - large centered
     let quote = pick(QUOTES);
     try {
       const res = await fetch("/api/generate-quote", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ category: "self-love" }),
       });
       const data = await res.json();
       if (data.quote) {
-        // Format into multi-line heading (max ~4 words per line)
         const words = data.quote.split(" ");
-        const lines: string[] = [];
-        let line = "";
-        for (const word of words) {
-          if (line && (line + " " + word).length > 15) {
-            lines.push(line);
-            line = word;
-          } else {
-            line = line ? line + " " + word : word;
-          }
+        const lines: string[] = []; let line = "";
+        for (const w of words) {
+          if (line && (line + " " + w).length > 14) { lines.push(line); line = w; }
+          else { line = line ? line + " " + w : w; }
         }
         if (line) lines.push(line);
         quote = lines.join("\n");
       }
-    } catch { /* use fallback */ }
+    } catch { /* fallback */ }
 
-    const headingFont = pick([
-      "'Playfair Display', serif",
-      "'Cormorant Garamond', serif",
-      "'Lora', serif",
-    ]);
-    canvas.addText(quote, {
-      fontFamily: headingFont,
-      fontSize: 68 + Math.floor(Math.random() * 20),
-      fill: "#4a3728",
-      fontWeight: "600",
-      textAlign: "center",
+    c.addText(quote, {
+      left: W / 2, top: H * 0.36,
+      fontFamily: pick(["'Playfair Display', serif", "'Cormorant Garamond', serif", "'Lora', serif"]),
+      fontSize: 80, fill: "#4a3728", fontWeight: "600", textAlign: "center",
     });
-
     await delay(60);
 
-    // 9. Dot accent
-    canvas.addSvgElement(`<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3" fill="#8b6e50"/></svg>`);
+    // 10. Center dot
+    c.addSvgElement(
+      `<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3.5" fill="#8b6e50"/></svg>`,
+      { left: W * 0.48, top: H * 0.55, scaleW: W * 0.02 }
+    );
+    await delay(40);
 
+    // 11. Divider line below heading
+    c.addSvgElement(
+      `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`,
+      { left: W * 0.15, top: H * 0.57, scaleW: W * 0.7 }
+    );
     await delay(60);
 
-    // 10. Tagline
-    canvas.addText(pick(TAGLINES), {
-      fontFamily: "'Cormorant Garamond', serif",
-      fontSize: 24,
-      fill: "#6b5040",
-      fontStyle: "italic",
-      textAlign: "center",
+    // 12. Italic tagline
+    c.addText(pick(TAGLINES), {
+      left: W / 2, top: H * 0.60,
+      fontFamily: "'Cormorant Garamond', serif", fontSize: 26,
+      fill: "#6b5040", fontStyle: "italic", textAlign: "center",
     });
-
     await delay(60);
 
-    // 11. Dashed line separator
-    canvas.addSvgElement(`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="5" x2="190" y2="5" stroke="#b8a070" stroke-width="1.2" stroke-dasharray="6,4"/></svg>`);
-
+    // 13. Middle row of animal faces
+    const midAnimals = pickN(cuteAnimals, 3);
+    c.addSvgElement(midAnimals[0].svg, { left: W * 0.18, top: H * 0.65, scaleW: W * 0.09 });
+    await delay(50);
+    c.addSvgElement(midAnimals[1].svg, { left: W * 0.43, top: H * 0.64, scaleW: W * 0.1 });
+    await delay(50);
+    c.addSvgElement(midAnimals[2].svg, { left: W * 0.7, top: H * 0.65, scaleW: W * 0.09 });
     await delay(60);
 
-    // 12. Bottom quote
-    canvas.addText(pick(TAGLINES), {
-      fontFamily: "'Cormorant Garamond', serif",
-      fontSize: 20,
-      fill: "#6b5040",
-      fontStyle: "italic",
-      textAlign: "center",
-      charSpacing: 200,
+    // 14. Dashed line separator
+    c.addSvgElement(
+      `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#b8a070" stroke-width="1" stroke-dasharray="5,3"/></svg>`,
+      { left: W * 0.1, top: H * 0.77, scaleW: W * 0.8 }
+    );
+    await delay(60);
+
+    // 15. Bottom italic text with letter spacing
+    c.addText(pick(TAGLINES), {
+      left: W / 2, top: H * 0.80,
+      fontFamily: "'Cormorant Garamond', serif", fontSize: 22,
+      fill: "#6b5040", fontStyle: "italic", textAlign: "center", charSpacing: 150,
     });
-
     await delay(60);
 
-    // 13. Bottom dots
+    // 16. Bottom dots
     const dots = pick(ELEMENTS.filter(e => e.tags.includes("dots") && e.tags.includes("row")));
-    if (dots) canvas.addSvgElement(dots.svg);
-
+    if (dots) c.addSvgElement(dots.svg, { left: W * 0.3, top: H * 0.86, scaleW: W * 0.4 });
     await delay(60);
 
-    // 14. Caption
-    canvas.addText(pick(CAPTIONS), {
-      fontFamily: "'Montserrat', sans-serif",
-      fontSize: 14,
-      fill: "#c4a888",
-      fontWeight: "300",
-      textAlign: "center",
+    // 17. Bottom caption
+    c.addText(pick(CAPTIONS), {
+      left: W / 2, top: H * 0.91,
+      fontFamily: "'Montserrat', sans-serif", fontSize: 14,
+      fill: "#c4a888", fontWeight: "300", textAlign: "center",
     });
 
     setIsRandomizing(false);
@@ -219,7 +219,7 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
     <div className="px-3 py-3">
       <h3 className="text-sm font-semibold text-foreground/80 mb-2">Randomizer</h3>
       <p className="text-xs text-foreground/40 mb-2">
-        Generate a poster layout with elements, text hierarchy, and an inspiring quote - just like the example
+        Generate a full poster layout matching the example style
       </p>
       <button
         onClick={randomize}
@@ -232,5 +232,3 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
     </div>
   );
 }
-
-function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }

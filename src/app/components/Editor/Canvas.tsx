@@ -5,7 +5,7 @@ import * as fabric from "fabric";
 
 export interface CanvasHandle {
   canvas: fabric.Canvas | null;
-  addSvgElement: (svgString: string) => void;
+  addSvgElement: (svgString: string, opts?: { left?: number; top?: number; scaleW?: number }) => void;
   addText: (text: string, options?: Record<string, unknown>) => void;
   setBackgroundColor: (color: string) => void;
   exportPng: () => void;
@@ -15,6 +15,7 @@ export interface CanvasHandle {
   redo: () => void;
   deleteSelected: () => void;
   getCanvas: () => fabric.Canvas | null;
+  getSize: () => { width: number; height: number };
 }
 
 interface CanvasProps {
@@ -33,6 +34,9 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
     const historyRef = useRef<string[]>([]);
     const historyIndexRef = useRef(-1);
     const skipHistoryRef = useRef(false);
+    const sizeRef = useRef({ width, height });
+
+    sizeRef.current = { width, height };
 
     const saveHistory = useCallback(() => {
       if (skipHistoryRef.current || !fabricRef.current) return;
@@ -51,13 +55,11 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       if (!canvasRef.current || fabricRef.current) return;
 
       const scale = Math.min(MAX_DISPLAY / width, MAX_DISPLAY / height, 1);
-      const displayW = width * scale;
-      const displayH = height * scale;
 
       const canvas = new fabric.Canvas(canvasRef.current, {
-        width: displayW,
-        height: displayH,
-        backgroundColor: backgroundColor,
+        width: width * scale,
+        height: height * scale,
+        backgroundColor,
         preserveObjectStacking: true,
       });
 
@@ -66,37 +68,22 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       canvas.on("object:modified", saveHistory);
       canvas.on("object:added", saveHistory);
       canvas.on("object:removed", saveHistory);
-
-      canvas.on("selection:created", (e) => {
-        onSelectionChange?.(e.selected?.[0] || null);
-      });
-      canvas.on("selection:updated", (e) => {
-        onSelectionChange?.(e.selected?.[0] || null);
-      });
-      canvas.on("selection:cleared", () => {
-        onSelectionChange?.(null);
-      });
+      canvas.on("selection:created", (e) => onSelectionChange?.(e.selected?.[0] || null));
+      canvas.on("selection:updated", (e) => onSelectionChange?.(e.selected?.[0] || null));
+      canvas.on("selection:cleared", () => onSelectionChange?.(null));
 
       fabricRef.current = canvas;
       saveHistory();
 
-      return () => {
-        canvas.dispose();
-        fabricRef.current = null;
-      };
+      return () => { canvas.dispose(); fabricRef.current = null; };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Update canvas size when dimensions change
     useEffect(() => {
       const canvas = fabricRef.current;
       if (!canvas) return;
-
       const scale = Math.min(MAX_DISPLAY / width, MAX_DISPLAY / height, 1);
-      canvas.setDimensions({
-        width: width * scale,
-        height: height * scale,
-      });
+      canvas.setDimensions({ width: width * scale, height: height * scale });
       canvas.setZoom(scale);
       canvas.backgroundColor = backgroundColor;
       canvas.renderAll();
@@ -104,22 +91,27 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
 
     useImperativeHandle(ref, () => ({
       canvas: fabricRef.current,
-
       getCanvas: () => fabricRef.current,
+      getSize: () => sizeRef.current,
 
-      addSvgElement: (svgString: string) => {
+      addSvgElement: (svgString: string, opts?: { left?: number; top?: number; scaleW?: number }) => {
         const canvas = fabricRef.current;
         if (!canvas) return;
+        const W = sizeRef.current.width;
+        const H = sizeRef.current.height;
 
         fabric.loadSVGFromString(svgString).then((result) => {
           const group = fabric.util.groupSVGElements(
             result.objects.filter(Boolean) as fabric.FabricObject[],
             result.options
           );
-          group.scaleToWidth(120);
+          // Default: scale to ~15% of canvas width when dragged from panel
+          // If scaleW provided, use that as target width
+          const targetW = opts?.scaleW ?? W * 0.15;
+          group.scaleToWidth(targetW);
           group.set({
-            left: width / 2 - 60,
-            top: height / 2 - 60,
+            left: opts?.left ?? (W / 2 - targetW / 2),
+            top: opts?.top ?? (H / 2 - targetW / 2),
           });
           canvas.add(group);
           canvas.setActiveObject(group);
@@ -130,15 +122,29 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       addText: (text: string, options?: Record<string, unknown>) => {
         const canvas = fabricRef.current;
         if (!canvas) return;
+        const W = sizeRef.current.width;
+        const H = sizeRef.current.height;
+
+        // Scale font size relative to canvas (base: 2480 wide)
+        const baseSize = (options?.fontSize as number) || 36;
+        const scaledSize = Math.round(baseSize * (W / 2480));
+
+        const left = (options?.left as number) ?? W / 2;
+        const top = (options?.top as number) ?? H / 2;
+        const opts = { ...options };
+        delete opts.left;
+        delete opts.top;
+        delete opts.fontSize;
 
         const itext = new fabric.IText(text, {
-          left: width / 2 - 100,
-          top: height / 2 - 20,
           fontFamily: "'Playfair Display', serif",
-          fontSize: 36,
           fill: "#4a3728",
           textAlign: "center",
-          ...options,
+          originX: "center",
+          ...opts,
+          fontSize: scaledSize,
+          left,
+          top,
         });
         canvas.add(itext);
         canvas.setActiveObject(itext);
@@ -156,21 +162,15 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       exportPng: () => {
         const canvas = fabricRef.current;
         if (!canvas) return;
-
+        const W = sizeRef.current.width;
+        const H = sizeRef.current.height;
         const zoom = canvas.getZoom();
         canvas.setZoom(1);
-        canvas.setDimensions({ width, height });
-
-        const dataUrl = canvas.toDataURL({
-          format: "png",
-          quality: 1,
-          multiplier: 1,
-        });
-
+        canvas.setDimensions({ width: W, height: H });
+        const dataUrl = canvas.toDataURL({ format: "png", quality: 1, multiplier: 1 });
         canvas.setZoom(zoom);
-        const scale = Math.min(MAX_DISPLAY / width, MAX_DISPLAY / height, 1);
-        canvas.setDimensions({ width: width * scale, height: height * scale });
-
+        const scale = Math.min(MAX_DISPLAY / W, MAX_DISPLAY / H, 1);
+        canvas.setDimensions({ width: W * scale, height: H * scale });
         const link = document.createElement("a");
         link.download = "wall-art.png";
         link.href = dataUrl;
@@ -180,21 +180,15 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       exportJpg: () => {
         const canvas = fabricRef.current;
         if (!canvas) return;
-
+        const W = sizeRef.current.width;
+        const H = sizeRef.current.height;
         const zoom = canvas.getZoom();
         canvas.setZoom(1);
-        canvas.setDimensions({ width, height });
-
-        const dataUrl = canvas.toDataURL({
-          format: "jpeg",
-          quality: 0.95,
-          multiplier: 1,
-        });
-
+        canvas.setDimensions({ width: W, height: H });
+        const dataUrl = canvas.toDataURL({ format: "jpeg", quality: 0.95, multiplier: 1 });
         canvas.setZoom(zoom);
-        const scale = Math.min(MAX_DISPLAY / width, MAX_DISPLAY / height, 1);
-        canvas.setDimensions({ width: width * scale, height: height * scale });
-
+        const scale = Math.min(MAX_DISPLAY / W, MAX_DISPLAY / H, 1);
+        canvas.setDimensions({ width: W * scale, height: H * scale });
         const link = document.createElement("a");
         link.download = "wall-art.jpg";
         link.href = dataUrl;
@@ -213,11 +207,9 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       undo: () => {
         const canvas = fabricRef.current;
         if (!canvas || historyIndexRef.current <= 0) return;
-
         skipHistoryRef.current = true;
         historyIndexRef.current--;
-        const json = historyRef.current[historyIndexRef.current];
-        canvas.loadFromJSON(JSON.parse(json)).then(() => {
+        canvas.loadFromJSON(JSON.parse(historyRef.current[historyIndexRef.current])).then(() => {
           canvas.renderAll();
           skipHistoryRef.current = false;
         });
@@ -226,11 +218,9 @@ const EditorCanvas = forwardRef<CanvasHandle, CanvasProps>(
       redo: () => {
         const canvas = fabricRef.current;
         if (!canvas || historyIndexRef.current >= historyRef.current.length - 1) return;
-
         skipHistoryRef.current = true;
         historyIndexRef.current++;
-        const json = historyRef.current[historyIndexRef.current];
-        canvas.loadFromJSON(JSON.parse(json)).then(() => {
+        canvas.loadFromJSON(JSON.parse(historyRef.current[historyIndexRef.current])).then(() => {
           canvas.renderAll();
           skipHistoryRef.current = false;
         });
