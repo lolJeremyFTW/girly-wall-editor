@@ -55,15 +55,15 @@ const TEMPLATES: Template[] = [
       // Top divider
       { type:"svg", svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`, x:0.15, y:0.28, w:0.7 },
       // Subtitle
-      { type:"text", text:"A L W A Y S   R E M E M B E R", x:0.5, y:0.31, fontFamily:"'Montserrat', sans-serif", fontSize:18, fill:"#8b6e50", fontWeight:"400", textAlign:"center" },
+      { type:"text", text:"A L W A Y S   R E M E M B E R", x:0.5, y:0.29, fontFamily:"'Montserrat', sans-serif", fontSize:55, fill:"#8b6e50", fontWeight:"400", textAlign:"center" },
       // Main heading
-      { type:"text", text:"Choose\nYourself,\nEvery Day.", x:0.5, y:0.36, fontFamily:"'Playfair Display', serif", fontSize:80, fill:"#4a3728", fontWeight:"600", textAlign:"center" },
+      { type:"text", text:"Choose\nYourself,\nEvery Day.", x:0.5, y:0.33, fontFamily:"'Playfair Display', serif", fontSize:250, fill:"#4a3728", fontWeight:"600", textAlign:"center" },
       // Center dot
-      { type:"svg", svg:`<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3.5" fill="#8b6e50"/></svg>`, x:0.48, y:0.55, w:0.02 },
+      { type:"svg", svg:`<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#8b6e50"/></svg>`, x:0.48, y:0.535, w:0.025 },
       // Bottom divider
-      { type:"svg", svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`, x:0.15, y:0.57, w:0.7 },
+      { type:"svg", svg:`<svg viewBox="0 0 200 6"><line x1="0" y1="3" x2="200" y2="3" stroke="#c4a888" stroke-width="0.8"/></svg>`, x:0.12, y:0.555, w:0.76 },
       // Tagline
-      { type:"text", text:"you deserve your own love first", x:0.5, y:0.60, fontFamily:"'Cormorant Garamond', serif", fontSize:26, fill:"#6b5040", fontStyle:"italic", textAlign:"center" },
+      { type:"text", text:"you deserve your own love first", x:0.5, y:0.58, fontFamily:"'Cormorant Garamond', serif", fontSize:75, fill:"#6b5040", fontStyle:"italic", textAlign:"center" },
       // Middle puppies
       { type:"svg", elementId:"puppy-1", x:0.18, y:0.65, w:0.09 },
       { type:"svg", elementId:"puppy-2", x:0.43, y:0.64, w:0.1 },
@@ -71,11 +71,11 @@ const TEMPLATES: Template[] = [
       // Dashed line
       { type:"svg", svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#b8a070" stroke-width="1" stroke-dasharray="5,3"/></svg>`, x:0.1, y:0.77, w:0.8 },
       // Bottom text
-      { type:"text", text:"your story is worth telling", x:0.5, y:0.80, fontFamily:"'Cormorant Garamond', serif", fontSize:22, fill:"#6b5040", fontStyle:"italic", textAlign:"center", charSpacing:150 },
+      { type:"text", text:"your story is worth telling", x:0.5, y:0.81, fontFamily:"'Cormorant Garamond', serif", fontSize:65, fill:"#6b5040", fontStyle:"italic", textAlign:"center", charSpacing:100 },
       // Dots
-      { type:"svg", elementId:"dots-row-pink", x:0.3, y:0.86, w:0.4 },
+      { type:"svg", elementId:"dots-row-pink", x:0.30, y:0.87, w:0.40 },
       // Caption
-      { type:"text", text:"s e l f   l o v e   c o l l e c t i o n", x:0.5, y:0.91, fontFamily:"'Montserrat', sans-serif", fontSize:14, fill:"#c4a888", fontWeight:"300", textAlign:"center" },
+      { type:"text", text:"s e l f   l o v e   c o l l e c t i o n", x:0.5, y:0.92, fontFamily:"'Montserrat', sans-serif", fontSize:42, fill:"#c4a888", fontWeight:"300", textAlign:"center" },
     ],
   },
   {
@@ -88,9 +88,9 @@ const TEMPLATES: Template[] = [
       { type:"svg", elementId:"eucalyptus-1", x:0.08, y:0.1, w:0.1 },
       { type:"svg", elementId:"olive-branch", x:0.82, y:0.1, w:0.1 },
       { type:"svg", svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`, x:0.2, y:0.35, w:0.6 },
-      { type:"text", text:"Be Still\n& Know", x:0.5, y:0.40, fontFamily:"'Playfair Display', serif", fontSize:90, fill:"#4a3728", fontWeight:"600", textAlign:"center" },
-      { type:"svg", svg:`<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`, x:0.2, y:0.60, w:0.6 },
-      { type:"text", text:"that you are enough", x:0.5, y:0.65, fontFamily:"'Cormorant Garamond', serif", fontSize:24, fill:"#8b6e50", fontStyle:"italic", textAlign:"center" },
+      { type:"text", text:"Be Still\n& Know", x:0.5, y:0.38, fontFamily:"'Playfair Display', serif", fontSize:300, fill:"#4a3728", fontWeight:"600", textAlign:"center" },
+      { type:"svg", svg:`<svg viewBox="0 0 200 6"><line x1="0" y1="3" x2="200" y2="3" stroke="#c4a888" stroke-width="0.8"/></svg>`, x:0.2, y:0.58, w:0.6 },
+      { type:"text", text:"that you are enough", x:0.5, y:0.62, fontFamily:"'Cormorant Garamond', serif", fontSize:75, fill:"#8b6e50", fontStyle:"italic", textAlign:"center" },
     ],
   },
   {
@@ -104,11 +104,11 @@ const TEMPLATES: Template[] = [
       { type:"svg", elementId:"cluster-pink", x:0.68, y:0.08, w:0.18 },
       { type:"svg", elementId:"cherry-blossom", x:0.3, y:0.12, w:0.08 },
       { type:"svg", elementId:"wildflower-1", x:0.6, y:0.14, w:0.07 },
-      { type:"text", text:"Bloom\nWhere You\nAre Planted", x:0.5, y:0.35, fontFamily:"'Playfair Display', serif", fontSize:72, fill:"#4a3728", fontWeight:"600", textAlign:"center" },
+      { type:"text", text:"Bloom\nWhere You\nAre Planted", x:0.5, y:0.33, fontFamily:"'Playfair Display', serif", fontSize:220, fill:"#4a3728", fontWeight:"600", textAlign:"center" },
       { type:"svg", elementId:"wildflower-spray", x:0.2, y:0.65, w:0.1 },
       { type:"svg", elementId:"tulip-1", x:0.45, y:0.63, w:0.08 },
       { type:"svg", elementId:"wildflower-1", x:0.7, y:0.65, w:0.1 },
-      { type:"text", text:"g r o w   w i t h   g r a c e", x:0.5, y:0.85, fontFamily:"'Montserrat', sans-serif", fontSize:14, fill:"#a09060", fontWeight:"300", textAlign:"center" },
+      { type:"text", text:"g r o w   w i t h   g r a c e", x:0.5, y:0.85, fontFamily:"'Montserrat', sans-serif", fontSize:45, fill:"#a09060", fontWeight:"300", textAlign:"center" },
     ],
   },
 ];

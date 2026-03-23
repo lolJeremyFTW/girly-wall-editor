@@ -192,11 +192,11 @@ export interface TextPreset {
 }
 
 export const TEXT_PRESETS: TextPreset[] = [
-  { id:"heading-large", name:"Large Heading", fontFamily:"'Playfair Display', serif", fontSize:72, fill:"#4a3728", fontWeight:"600", textAlign:"center", text:"Your Title Here" },
-  { id:"heading-accent", name:"Accent Heading", fontFamily:"'Playfair Display', serif", fontSize:72, fill:"#c49a6c", fontWeight:"600", fontStyle:"italic", textAlign:"center", text:"Accent Word" },
-  { id:"subtitle-spaced", name:"Spaced Subtitle", fontFamily:"'Montserrat', sans-serif", fontSize:18, fill:"#8b6e50", letterSpacing:600, fontWeight:"400", textAlign:"center", text:"A L W A Y S   R E M E M B E R" },
-  { id:"body-italic", name:"Italic Body", fontFamily:"'Cormorant Garamond', serif", fontSize:24, fill:"#6b5040", fontStyle:"italic", textAlign:"center", text:"you deserve your own love first" },
-  { id:"caption-spaced", name:"Spaced Caption", fontFamily:"'Montserrat', sans-serif", fontSize:14, fill:"#c4a888", letterSpacing:500, fontWeight:"300", textAlign:"center", text:"s e l f   l o v e   c o l l e c t i o n" },
-  { id:"script-large", name:"Script Text", fontFamily:"'Dancing Script', cursive", fontSize:48, fill:"#8b5e3c", textAlign:"center", text:"Beautiful" },
-  { id:"quote-elegant", name:"Elegant Quote", fontFamily:"'Cormorant Garamond', serif", fontSize:28, fill:"#5a3e28", fontStyle:"italic", textAlign:"center", text:"your story is worth telling" },
+  { id:"heading-large", name:"Large Heading", fontFamily:"'Playfair Display', serif", fontSize:220, fill:"#4a3728", fontWeight:"600", textAlign:"center", text:"Your Title\nHere" },
+  { id:"heading-accent", name:"Accent Heading", fontFamily:"'Playfair Display', serif", fontSize:220, fill:"#c49a6c", fontWeight:"600", fontStyle:"italic", textAlign:"center", text:"Accent\nWord" },
+  { id:"subtitle-spaced", name:"Spaced Subtitle", fontFamily:"'Montserrat', sans-serif", fontSize:55, fill:"#8b6e50", letterSpacing:600, fontWeight:"400", textAlign:"center", text:"A L W A Y S   R E M E M B E R" },
+  { id:"body-italic", name:"Italic Body", fontFamily:"'Cormorant Garamond', serif", fontSize:75, fill:"#6b5040", fontStyle:"italic", textAlign:"center", text:"you deserve your own love first" },
+  { id:"caption-spaced", name:"Spaced Caption", fontFamily:"'Montserrat', sans-serif", fontSize:42, fill:"#c4a888", letterSpacing:500, fontWeight:"300", textAlign:"center", text:"s e l f   l o v e   c o l l e c t i o n" },
+  { id:"script-large", name:"Script Text", fontFamily:"'Dancing Script', cursive", fontSize:150, fill:"#8b5e3c", textAlign:"center", text:"Beautiful" },
+  { id:"quote-elegant", name:"Elegant Quote", fontFamily:"'Cormorant Garamond', serif", fontSize:80, fill:"#5a3e28", fontStyle:"italic", textAlign:"center", text:"your story is worth telling" },
 ];

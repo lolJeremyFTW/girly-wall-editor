@@ -16,7 +16,7 @@ const QUOTES = [
   "She Believed\nShe Could,\nSo She Did",
   "You Are\nEnough,\nAlways.",
   "Grow Through\nWhat You\nGo Through",
-  "Dream\nWithout Fear",
+  "Dream\nWithout\nFear",
   "Be The Energy\nYou Want\nTo Attract",
   "Your Story\nIs Worth\nTelling",
 ];
@@ -25,7 +25,7 @@ const SUBTITLES = [
   "A L W A Y S   R E M E M B E R",
   "N E V E R   F O R G E T",
   "K E E P   G O I N G",
-  "B E L I E V E",
+  "B E L I E V E   I N   Y O U",
   "Y O U   M A T T E R",
 ];
 
@@ -43,7 +43,7 @@ const CAPTIONS = [
   "w a l l   a r t   s e r i e s",
 ];
 
-const BG_COLORS = ["#f5ece0", "#fdf6f0", "#f0e4d4", "#fff8f0"];
+const BG = ["#f5ece0", "#fdf6f0", "#f0e4d4", "#fff8f0"];
 function pick<T>(a: T[]): T { return a[Math.floor(Math.random() * a.length)]; }
 function pickN<T>(a: T[], n: number): T[] { return [...a].sort(() => Math.random() - 0.5).slice(0, n); }
 function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }
@@ -59,75 +59,70 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
     c.clearCanvas();
     const { width: W, height: H } = c.getSize();
 
-    // Background color
-    const bg = pick(BG_COLORS);
+    const bg = pick(BG);
     c.setBackgroundColor(bg);
     onBackgroundChange(bg);
-
     await delay(50);
 
-    // 1. Large background circle - upper center area
+    // 1. Big background circle - upper half
     c.addSvgElement(
-      `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="48" fill="#f0e4d4" opacity="0.45"/></svg>`,
-      { left: W * 0.2, top: H * 0.05, scaleW: W * 0.6 }
+      `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#f0e4d4" opacity="0.45"/></svg>`,
+      { left: W * 0.15, top: H * 0.04, scaleW: W * 0.7 }
     );
-    await delay(80);
+    await delay(60);
 
-    // 2. Thin border frame
+    // 2. Full poster frame
     c.addSvgElement(
-      `<svg viewBox="0 0 100 141" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="96" height="137" rx="1" fill="none" stroke="#c4a888" stroke-width="0.5"/></svg>`,
-      { left: W * 0.05, top: H * 0.03, scaleW: W * 0.9 }
+      `<svg viewBox="0 0 248 351"><rect x="4" y="4" width="240" height="343" rx="2" fill="none" stroke="#c4a888" stroke-width="1.2"/></svg>`,
+      { left: W * 0.04, top: H * 0.02, scaleW: W * 0.92 }
     );
-    await delay(80);
+    await delay(60);
 
     // 3. Corner leaf clusters
-    const clusters = ELEMENTS.filter(e => e.tags.includes("cluster"));
-    const clusterPicks = pickN(clusters, 2);
-    c.addSvgElement(clusterPicks[0].svg, { left: W * 0.06, top: H * 0.04, scaleW: W * 0.14 });
-    await delay(60);
-    c.addSvgElement(clusterPicks[1].svg, { left: W * 0.78, top: H * 0.04, scaleW: W * 0.14 });
-    await delay(60);
-
-    // 4. Side leaf clusters at bottom
-    const moreClusters = pickN(clusters, 2);
-    c.addSvgElement(moreClusters[0].svg, { left: W * 0.82, top: H * 0.35, scaleW: W * 0.1 });
-    await delay(60);
-    c.addSvgElement(moreClusters[1].svg, { left: W * 0.04, top: H * 0.38, scaleW: W * 0.1 });
-    await delay(60);
-
-    // 5. Vertical accent lines (left and right of frame)
-    const vertLine = `<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="0" x2="3" y2="100" stroke="#5a4030" stroke-width="1.5"/><line x1="7" y1="0" x2="7" y2="100" stroke="#5a4030" stroke-width="1.5"/></svg>`;
-    c.addSvgElement(vertLine, { left: W * 0.09, top: H * 0.06, scaleW: W * 0.012 });
+    const cls = pickN(ELEMENTS.filter(e => e.tags.includes("cluster")), 4);
+    c.addSvgElement(cls[0].svg, { left: W * 0.05, top: H * 0.025, scaleW: W * 0.15 });
     await delay(40);
-    c.addSvgElement(vertLine, { left: W * 0.89, top: H * 0.06, scaleW: W * 0.012 });
-    await delay(60);
+    c.addSvgElement(cls[1].svg, { left: W * 0.80, top: H * 0.025, scaleW: W * 0.15 });
+    await delay(40);
+    // Side accents
+    c.addSvgElement((cls[2] || cls[0]).svg, { left: W * 0.82, top: H * 0.28, scaleW: W * 0.10 });
+    await delay(40);
+    c.addSvgElement((cls[3] || cls[1]).svg, { left: W * 0.04, top: H * 0.30, scaleW: W * 0.10 });
+    await delay(40);
 
-    // 6. Cute animal faces - top row (inside the circle area)
-    const cuteAnimals = ELEMENTS.filter(e => e.category === "cute");
-    const topAnimals = pickN(cuteAnimals, 3);
-    c.addSvgElement(topAnimals[0].svg, { left: W * 0.42, top: H * 0.08, scaleW: W * 0.08 });
-    await delay(50);
-    c.addSvgElement(topAnimals[1].svg, { left: W * 0.2, top: H * 0.15, scaleW: W * 0.07 });
-    await delay(50);
-    c.addSvgElement(topAnimals[2].svg, { left: W * 0.68, top: H * 0.15, scaleW: W * 0.07 });
-    await delay(60);
+    // 4. Vertical accent lines
+    const vl = `<svg viewBox="0 0 10 200"><line x1="3" y1="0" x2="3" y2="200" stroke="#5a4030" stroke-width="1.5"/><line x1="7" y1="0" x2="7" y2="200" stroke="#5a4030" stroke-width="1.5"/></svg>`;
+    c.addSvgElement(vl, { left: W * 0.085, top: H * 0.03, scaleW: W * 0.015 });
+    await delay(30);
+    c.addSvgElement(vl, { left: W * 0.90, top: H * 0.03, scaleW: W * 0.015 });
+    await delay(40);
 
-    // 7. Horizontal divider line
+    // 5. Top animal faces
+    const animals = ELEMENTS.filter(e => e.category === "cute");
+    const topA = pickN(animals, 3);
+    c.addSvgElement(topA[0].svg, { left: W * 0.40, top: H * 0.06, scaleW: W * 0.10 });
+    await delay(40);
+    c.addSvgElement(topA[1].svg, { left: W * 0.18, top: H * 0.12, scaleW: W * 0.09 });
+    await delay(40);
+    c.addSvgElement(topA[2].svg, { left: W * 0.68, top: H * 0.12, scaleW: W * 0.09 });
+    await delay(50);
+
+    // 6. Top divider line
     c.addSvgElement(
-      `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`,
-      { left: W * 0.15, top: H * 0.28, scaleW: W * 0.7 }
+      `<svg viewBox="0 0 200 6"><line x1="0" y1="3" x2="200" y2="3" stroke="#c4a888" stroke-width="0.8"/></svg>`,
+      { left: W * 0.12, top: H * 0.265, scaleW: W * 0.76 }
     );
-    await delay(60);
+    await delay(40);
 
-    // 8. Spaced subtitle text
+    // 7. Spaced subtitle
     c.addText(pick(SUBTITLES), {
-      left: W / 2, top: H * 0.31,
-      fontFamily: "'Montserrat', sans-serif", fontSize: 18,
+      left: W * 0.5, top: H * 0.29,
+      fontFamily: "'Montserrat', sans-serif", fontSize: 55,
       fill: "#8b6e50", fontWeight: "400", textAlign: "center",
     });
-    await delay(60);
+    await delay(50);
 
-    // 9. MAIN HEADING - large centered
+    // 8. MAIN HEADING
     let quote = pick(QUOTES);
     try {
       const res = await fetch("/api/generate-quote", {
@@ -139,7 +134,7 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
         const words = data.quote.split(" ");
         const lines: string[] = []; let line = "";
         for (const w of words) {
-          if (line && (line + " " + w).length > 14) { lines.push(line); line = w; }
+          if (line && (line + " " + w).length > 12) { lines.push(line); line = w; }
           else { line = line ? line + " " + w : w; }
         }
         if (line) lines.push(line);
@@ -148,67 +143,69 @@ export default function Randomizer({ canvasRef, onBackgroundChange }: Randomizer
     } catch { /* fallback */ }
 
     c.addText(quote, {
-      left: W / 2, top: H * 0.36,
-      fontFamily: pick(["'Playfair Display', serif", "'Cormorant Garamond', serif", "'Lora', serif"]),
-      fontSize: 80, fill: "#4a3728", fontWeight: "600", textAlign: "center",
+      left: W * 0.5, top: H * 0.33,
+      fontFamily: pick(["'Playfair Display', serif", "'Cormorant Garamond', serif"]),
+      fontSize: 250, fill: "#4a3728", fontWeight: "600", textAlign: "center",
     });
-    await delay(60);
+    await delay(50);
 
-    // 10. Center dot
+    // 9. Center dot below heading
     c.addSvgElement(
-      `<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="3.5" fill="#8b6e50"/></svg>`,
-      { left: W * 0.48, top: H * 0.55, scaleW: W * 0.02 }
+      `<svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#8b6e50"/></svg>`,
+      { left: W * 0.48, top: H * 0.535, scaleW: W * 0.025 }
+    );
+    await delay(30);
+
+    // 10. Bottom divider
+    c.addSvgElement(
+      `<svg viewBox="0 0 200 6"><line x1="0" y1="3" x2="200" y2="3" stroke="#c4a888" stroke-width="0.8"/></svg>`,
+      { left: W * 0.12, top: H * 0.555, scaleW: W * 0.76 }
     );
     await delay(40);
 
-    // 11. Divider line below heading
-    c.addSvgElement(
-      `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#c4a888" stroke-width="0.8"/></svg>`,
-      { left: W * 0.15, top: H * 0.57, scaleW: W * 0.7 }
-    );
-    await delay(60);
-
-    // 12. Italic tagline
+    // 11. Italic tagline
     c.addText(pick(TAGLINES), {
-      left: W / 2, top: H * 0.60,
-      fontFamily: "'Cormorant Garamond', serif", fontSize: 26,
+      left: W * 0.5, top: H * 0.58,
+      fontFamily: "'Cormorant Garamond', serif", fontSize: 75,
       fill: "#6b5040", fontStyle: "italic", textAlign: "center",
     });
-    await delay(60);
-
-    // 13. Middle row of animal faces
-    const midAnimals = pickN(cuteAnimals, 3);
-    c.addSvgElement(midAnimals[0].svg, { left: W * 0.18, top: H * 0.65, scaleW: W * 0.09 });
     await delay(50);
-    c.addSvgElement(midAnimals[1].svg, { left: W * 0.43, top: H * 0.64, scaleW: W * 0.1 });
-    await delay(50);
-    c.addSvgElement(midAnimals[2].svg, { left: W * 0.7, top: H * 0.65, scaleW: W * 0.09 });
-    await delay(60);
 
-    // 14. Dashed line separator
+    // 12. Middle row animal faces
+    const midA = pickN(animals, 3);
+    c.addSvgElement(midA[0].svg, { left: W * 0.15, top: H * 0.64, scaleW: W * 0.12 });
+    await delay(40);
+    c.addSvgElement(midA[1].svg, { left: W * 0.42, top: H * 0.63, scaleW: W * 0.13 });
+    await delay(40);
+    c.addSvgElement(midA[2].svg, { left: W * 0.72, top: H * 0.64, scaleW: W * 0.12 });
+    await delay(50);
+
+    // 13. Dashed line
     c.addSvgElement(
-      `<svg viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="195" y2="5" stroke="#b8a070" stroke-width="1" stroke-dasharray="5,3"/></svg>`,
-      { left: W * 0.1, top: H * 0.77, scaleW: W * 0.8 }
+      `<svg viewBox="0 0 200 6"><line x1="0" y1="3" x2="200" y2="3" stroke="#b8a070" stroke-width="1.2" stroke-dasharray="8,5"/></svg>`,
+      { left: W * 0.08, top: H * 0.78, scaleW: W * 0.84 }
     );
-    await delay(60);
+    await delay(40);
 
-    // 15. Bottom italic text with letter spacing
+    // 14. Bottom text
     c.addText(pick(TAGLINES), {
-      left: W / 2, top: H * 0.80,
-      fontFamily: "'Cormorant Garamond', serif", fontSize: 22,
-      fill: "#6b5040", fontStyle: "italic", textAlign: "center", charSpacing: 150,
+      left: W * 0.5, top: H * 0.81,
+      fontFamily: "'Cormorant Garamond', serif", fontSize: 65,
+      fill: "#6b5040", fontStyle: "italic", textAlign: "center", charSpacing: 100,
     });
-    await delay(60);
+    await delay(50);
 
-    // 16. Bottom dots
-    const dots = pick(ELEMENTS.filter(e => e.tags.includes("dots") && e.tags.includes("row")));
-    if (dots) c.addSvgElement(dots.svg, { left: W * 0.3, top: H * 0.86, scaleW: W * 0.4 });
-    await delay(60);
+    // 15. Bottom dots row
+    c.addSvgElement(
+      `<svg viewBox="0 0 100 15"><circle cx="30" cy="7" r="4" fill="#d4a090" opacity="0.5"/><circle cx="42" cy="7" r="2.5" fill="#c49080" opacity="0.4"/><circle cx="52" cy="7" r="5" fill="#d4a090" opacity="0.6"/><circle cx="64" cy="7" r="2.5" fill="#c49080" opacity="0.4"/><circle cx="74" cy="7" r="4" fill="#d4a090" opacity="0.5"/></svg>`,
+      { left: W * 0.30, top: H * 0.87, scaleW: W * 0.40 }
+    );
+    await delay(40);
 
-    // 17. Bottom caption
+    // 16. Bottom caption
     c.addText(pick(CAPTIONS), {
-      left: W / 2, top: H * 0.91,
-      fontFamily: "'Montserrat', sans-serif", fontSize: 14,
+      left: W * 0.5, top: H * 0.92,
+      fontFamily: "'Montserrat', sans-serif", fontSize: 42,
       fill: "#c4a888", fontWeight: "300", textAlign: "center",
     });
 

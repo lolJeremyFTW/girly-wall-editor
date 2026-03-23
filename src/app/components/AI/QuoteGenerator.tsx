@@ -21,21 +21,21 @@ const STYLES: { id: QuoteStyle; name: string; preview: string }[] = [
 const STYLE_MAP: Record<QuoteStyle, Record<string, unknown>> = {
   heading: {
     fontFamily: "'Playfair Display', serif",
-    fontSize: 64,
+    fontSize: 220,
     fill: "#4a3728",
     fontWeight: "600",
     textAlign: "center",
   },
   italic: {
     fontFamily: "'Cormorant Garamond', serif",
-    fontSize: 26,
+    fontSize: 80,
     fill: "#6b5040",
     fontStyle: "italic",
     textAlign: "center",
   },
   spaced: {
     fontFamily: "'Montserrat', sans-serif",
-    fontSize: 16,
+    fontSize: 50,
     fill: "#8b6e50",
     fontWeight: "400",
     textAlign: "center",
@@ -43,7 +43,7 @@ const STYLE_MAP: Record<QuoteStyle, Record<string, unknown>> = {
   },
   script: {
     fontFamily: "'Dancing Script', cursive",
-    fontSize: 44,
+    fontSize: 150,
     fill: "#8b5e3c",
     textAlign: "center",
   },
